@@ -12,10 +12,9 @@ class Agencia {
 private:
 		string nombre;
 		string pass;
-		list<Venta> ventasAg;
+		list<Venta*> ventasAg;
 
 public:
-		Agencia();
 		void setNombre(string nombreIn);
 		void setPass(string passIn);
 		void setVentas(list<Venta*> ventasIn);

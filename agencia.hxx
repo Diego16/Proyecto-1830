@@ -1,8 +1,9 @@
-#ifndef __AGENCIA__H__
-#define __AGENCIA__H__
+#ifndef __AGENCIA__HPP__
+#define __AGENCIA__HPP__
 #include <list>
 #include <string.h>
 #include "venta.h"
+#include "agencia.h"
 
 using namespace std;
 void Agencia::setNombre(string nombreIn)
@@ -15,7 +16,7 @@ void Agencia::setPass(string passIn)
 }
 void Agencia::setVentas(list<Venta*> ventasIn)
 {
-		ventas = ventasIn;
+		ventasAg = ventasIn;
 }
 string Agencia::getNombre()
 {
@@ -25,7 +26,7 @@ string Agencia::getPass()
 {
 		return pass;
 }
-list<Venta> Agencia::getVentas()
+list<Venta*>& Agencia::getVentas()
 {
 		return ventasAg;
 }
