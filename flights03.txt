@@ -1,0 +1,600 @@
+HL400;miercoles;Helsinki;Oslo;0726;1031;457;545000
+HL401;martes;Florencia;Florencia;1448;1705;299;529000
+HL402;miercoles;Londres;Viena;2050;2231;374;532000
+HL403;miercoles;Sacramento;Lille;2136;2220;306;334000
+HL404;miercoles;Bursa;Ciudad de mexico;0643;1809;238;633000
+HL405;lunes;Buenos Aires;San Diego;0408;1245;376;303000
+HL406;miercoles;Amsterdam;Glasgow;1240;1605;357;334000
+HL407;jueves;Sidney;los Angeles;0802;1434;191;277000
+HL408;jueves;Chicago;San Francisco;1954;2049;117;589000
+HL409;miercoles;Taipei;Dublin;2018;1937;295;480000
+HL410;martes;Pretoria;Tokio;1505;1313;186;359000
+HL411;martes;Moscu;Manila;0840;0605;459;466000
+HL412;lunes;Varsovia;Phoenix;1825;1619;497;117000
+HL413;viernes;East Rand;Chicago;1906;2255;115;517000
+HL414;viernes;Paris;Londres;1429;0157;398;424000
+BL400;miercoles;Lisboa;Lyon;0517;0634;273;413000
+BL401;martes;San Diego;Johannesburgo;1530;1602;288;467000
+BL402;miercoles;Monterrey;Yakarta;2014;1015;395;576000
+BL403;viernes;Turin;Paris;0603;1258;327;666000
+BL404;martes;San Petersburgo;Miami;1222;2322;370;533000
+BL405;viernes;Praga;Florencia;1026;1506;135;542000
+BL406;lunes;Phoenix;Toronto;0843;0111;193;203000
+BL407;jueves;Zurich;seul;1353;1455;493;413000
+BL408;viernes;Guadalajara;San Diego;0950;1445;374;136000
+BL409;jueves;Bogota;Bogota;1122;1050;127;103000
+BL410;viernes;Taichung;Birsbane;1553;0940;314;678000
+BL411;viernes;Calcuta;Sidney;0521;1705;470;585000
+BL412;miercoles;East Rand;Lisboa;1011;0200;165;502000
+BL413;martes;Phoenix;Pretoria;0357;1708;244;611000
+BL414;jueves;los Angeles;Taichung;1359;0726;260;266000
+GG400;martes;Lyon;Hong kong;0939;1038;314;241000
+GG401;jueves;Hiroshima;East Rand;0946;0845;328;540000
+GG402;martes;Rio de Janeiro;Glasgow;0921;1016;192;629000
+GG403;miercoles;Glasgow;Dubai;1345;1900;194;609000
+GG404;viernes;Tokio;Moscu;0708;1042;120;633000
+GG405;martes;Houston;Turin;0608;0557;456;554000
+GG406;lunes;Ginebra;Calcuta;1451;0740;171;624000
+GG407;miercoles;Brasilia;Ginebra;0708;2023;149;110000
+GG408;lunes;Milan;Harbin;1558;0621;371;700000
+GG409;jueves;Zurich;Calgary;0908;1318;327;383000
+GG410;martes;Lyon;Basilea;0033;2001;273;563000
+GG411;martes;Daegu;Amsterdam;2312;1958;211;451000
+GG412;jueves;Viena;Yakarta;1004;2258;276;209000
+GG413;lunes;Calgary;Hiroshima;2222;1256;423;403000
+GG414;miercoles;Vancouver;Sidney;2244;2223;104;517000
+MT400;lunes;Brasilia;Chicago;2000;1350;321;331000
+MT401;viernes;Sidney;Bogota;0626;1105;204;679000
+MT402;miercoles;Johannesburgo;Taichung;2013;1030;311;285000
+MT403;miercoles;Harbin;Pretoria;1912;2028;131;437000
+MT404;lunes;El Cairo;Rio de Janeiro;0335;1552;225;626000
+MT405;viernes;Basilea;Oslo;1905;2145;315;139000
+MT406;jueves;Nueva York;Paris;0018;0219;136;497000
+MT407;miercoles;los Angeles;Praga;0103;1816;382;139000
+MT408;martes;Edmonton;Sidney;1608;1631;153;240000
+MT409;martes;Daegu;Taipei;1843;1347;365;541000
+MT410;miercoles;Edmonton;Atenas;0846;2106;108;100000
+MT411;jueves;Buenos Aires;seul;1909;0510;129;629000
+MT412;jueves;Bucarest;Nottingham;1113;0846;107;157000
+MT413;lunes;Pretoria;Pretoria;0725;0541;402;232000
+MT414;martes;Edmonton;Phoenix;1241;0215;260;325000
+MM400;lunes;Esmima;Yakarta;0921;1256;349;568000
+MM401;viernes;Sacramento;Zurich;1242;0605;106;238000
+MM402;miercoles;Zurich;Houston;2151;1653;313;479000
+MM403;martes;Calcuta;Hong kong;0658;0955;420;126000
+MM404;lunes;Almaty;San Diego;0604;0801;136;164000
+MM405;miercoles;perth;los Angeles;1015;0531;485;500000
+MM406;jueves;Phoenix;Ginebra;1206;2008;282;211000
+MM407;miercoles;Caracas;Lyon;1854;0856;354;490000
+MM408;lunes;Bangkok;Varsovia;1056;0411;446;174000
+MM409;viernes;Caracas;Fukuoka;2120;0632;430;580000
+MM410;viernes;Ginebra;Atenas;0706;1153;323;102000
+MM411;jueves;Sacramento;Hiroshima;0934;1333;376;583000
+MM412;viernes;Atenas;Turin;1430;1952;468;486000
+MM413;viernes;Lille;Manila;0127;1444;394;458000
+MM414;lunes;East Rand;Helsinki;2230;1407;189;686000
+IP400;martes;Almaty;Napoles;0147;0636;108;132000
+IP401;viernes;San Francisco;Moscu;1922;0505;360;286000
+IP402;miercoles;Chicago;Esmima;0803;1746;363;304000
+IP403;lunes;Almaty;Taipei;2111;0451;299;483000
+IP404;martes;Vancouver;Nueva York;2205;1828;153;608000
+IP405;lunes;Moscu;Sacramento;0827;0401;236;382000
+IP406;viernes;Bursa;Moscu;1605;1345;309;547000
+IP407;lunes;El Cairo;Manila;0512;2337;333;400000
+IP408;jueves;Pretoria;Miami;1925;0147;306;261000
+IP409;jueves;Esmima;Lyon;0925;0919;111;317000
+IP410;martes;Calcuta;Nottingham;0857;2211;271;157000
+IP411;jueves;Bursa;Phoenix;0113;0716;197;611000
+IP412;miercoles;Munich;Munich;1627;2004;183;576000
+IP413;viernes;Pretoria;Bucarest;1730;0909;309;308000
+IP414;miercoles;Houston;Milan;0927;2144;229;120000
+KG400;jueves;los Angeles;Caracas;0229;1953;420;655000
+KG401;lunes;Bangkok;Pretoria;1849;2136;344;508000
+KG402;viernes;shaghai;East Rand;0934;1153;244;699000
+KG403;jueves;Birsbane;Amsterdam;0208;2004;149;483000
+KG404;viernes;Lille;East Rand;0322;0313;439;261000
+KG405;lunes;Colonia;Bogota;0430;1737;123;688000
+KG406;jueves;Almaty;Napoles;0921;1353;237;249000
+KG407;miercoles;Monterrey;Buenos Aires;1946;2030;377;359000
+KG408;martes;Pretoria;East Rand;0447;1741;312;389000
+KG409;lunes;Munich;Zurich;0037;1645;434;487000
+KG410;miercoles;Phoenix;perth;1730;0957;388;500000
+KG411;martes;Tokio;Zurich;1353;1139;377;456000
+KG412;martes;Sidney;Milan;1030;1307;151;547000
+KG413;viernes;Sacramento;osaka;0933;2154;189;481000
+KG414;lunes;Milan;Buenos Aires;2027;1028;228;215000
+NX400;lunes;Buenos Aires;Helsinki;1143;0035;252;244000
+NX401;jueves;Durban;perth;1453;0111;272;471000
+NX402;miercoles;Pretoria;Milan;2227;1217;268;573000
+NX403;miercoles;Taipei;Buenos Aires;0257;2137;305;143000
+NX404;miercoles;Dublin;Sacramento;0604;1835;158;194000
+NX405;viernes;Calgary;Pekin;1346;0008;385;532000
+NX406;jueves;Colonia;San Diego;0543;1706;341;402000
+NX407;jueves;Chicago;Munich;2034;2056;197;666000
+NX408;miercoles;Caracas;Calgary;1123;2336;167;144000
+NX409;jueves;Varsovia;Calcuta;0124;0414;166;514000
+NX410;viernes;Harbin;San Francisco;1128;0905;426;345000
+NX411;viernes;Hong kong;los Angeles;1922;0119;210;517000
+NX412;jueves;Turin;Monterrey;0133;1321;340;220000
+NX413;miercoles;Toronto;Paris;1412;1903;134;508000
+NX414;martes;Phoenix;Sidney;0806;1233;189;190000
+ZM400;jueves;Sacramento;Praga;0437;0247;195;618000
+ZM401;viernes;Hiroshima;shaghai;0139;1231;226;237000
+ZM402;miercoles;Fukuoka;Viena;2324;0558;383;419000
+ZM403;martes;San Petersburgo;Bogota;1548;0936;249;674000
+ZM404;viernes;San Petersburgo;Caracas;0107;0353;171;224000
+ZM405;lunes;Lyon;Varsovia;0028;0040;454;244000
+ZM406;miercoles;Edmonton;Lille;0433;2333;403;259000
+ZM407;martes;San Diego;Fukuoka;0736;1528;128;293000
+ZM408;viernes;Taichung;Brasilia;1005;1611;134;130000
+ZM409;miercoles;Salvador;Dubai;0703;1526;239;246000
+ZM410;martes;Esmima;Bucarest;2205;2015;191;380000
+ZM411;miercoles;Guadalajara;Dublin;2327;2152;117;335000
+ZM412;viernes;Calcuta;San Diego;1848;1543;122;126000
+ZM413;viernes;los Angeles;seul;1442;2029;295;370000
+ZM414;jueves;Frankfurt;Frankfurt;0624;1524;263;245000
+QH400;jueves;Viena;Frankfurt;1837;0659;241;269000
+QH401;lunes;Bucarest;Frankfurt;1948;0447;199;656000
+QH402;lunes;Amsterdam;Praga;0847;0004;384;210000
+QH403;jueves;los Angeles;Paris;2223;0907;184;330000
+QH404;miercoles;Zurich;Praga;1323;0004;296;429000
+QH405;viernes;Nueva York;Hiroshima;0043;2023;464;508000
+QH406;miercoles;Houston;Houston;1735;0111;165;630000
+QH407;miercoles;Dublin;San Diego;0828;0009;334;458000
+QH408;lunes;Bucarest;San Francisco;0950;0321;395;462000
+QH409;martes;Phoenix;Rio de Janeiro;1603;0625;476;149000
+QH410;miercoles;Colonia;Taichung;0554;1735;457;116000
+QH411;miercoles;Pekin;Caracas;0210;1234;130;635000
+QH412;jueves;Buenos Aires;El Cairo;0832;1944;104;456000
+QH413;jueves;Helsinki;Calcuta;0300;0929;144;573000
+QH414;miercoles;Sacramento;Phoenix;1639;1325;195;211000
+JN400;martes;Lisboa;Dublin;1145;1515;422;233000
+JN401;martes;Taipei;Lisboa;2244;0547;382;618000
+JN402;lunes;Florencia;Lille;0115;0313;328;289000
+JN403;miercoles;Guadalajara;Viena;0059;2257;500;462000
+JN404;jueves;Harbin;Durban;0406;0719;440;296000
+JN405;jueves;Amsterdam;Ciudad de mexico;1906;1835;224;341000
+JN406;viernes;Bucarest;Manila;0515;1146;441;167000
+JN407;miercoles;Colonia;Harbin;1945;0231;420;134000
+JN408;lunes;los Angeles;Turin;1548;0210;368;574000
+JN409;lunes;Guadalajara;seul;0651;1212;499;429000
+JN410;miercoles;Johannesburgo;East Rand;0156;1503;180;449000
+JN411;jueves;Moscu;Durban;0913;2121;261;581000
+JN412;jueves;Manila;Milan;0011;1655;482;661000
+JN413;viernes;East Rand;Dubai;1211;0912;246;243000
+JN414;lunes;seul;Birsbane;0400;0655;494;111000
+TS400;martes;Ciudad de mexico;San Francisco;0717;0508;223;254000
+TS401;lunes;Manila;Praga;0646;1014;146;667000
+TS402;miercoles;Buenos Aires;Florencia;1638;1436;177;481000
+TS403;viernes;Monterrey;Chicago;0051;0628;485;492000
+TS404;jueves;Lisboa;Milan;1215;0948;360;295000
+TS405;viernes;Dubai;Milan;1346;1109;354;361000
+TS406;miercoles;Almaty;los Angeles;0905;2148;248;263000
+TS407;viernes;Praga;Napoles;0749;1423;310;104000
+TS408;martes;Buenos Aires;Tokio;0656;1505;145;381000
+TS409;lunes;Milan;Atenas;0934;0355;130;494000
+TS410;lunes;Oslo;Bangkok;0915;1618;451;190000
+TS411;viernes;Nottingham;Colonia;0036;1312;307;158000
+TS412;viernes;Florencia;Miami;1440;1208;183;313000
+TS413;miercoles;osaka;Monterrey;0446;0133;381;272000
+TS414;miercoles;Johannesburgo;Nagoya;0232;1838;226;450000
+XG400;jueves;Viena;Sacramento;1313;0143;341;581000
+XG401;viernes;Varsovia;Taichung;0300;0958;407;421000
+XG402;lunes;Manila;Sidney;1148;1037;478;381000
+XG403;viernes;Harbin;Glasgow;1107;1031;438;588000
+XG404;miercoles;Vancouver;Chicago;0006;0102;182;646000
+XG405;martes;Birsbane;Caracas;0846;0208;133;448000
+XG406;miercoles;Salvador;Yakarta;1349;1946;360;375000
+XG407;miercoles;perth;los Angeles;0145;0726;390;130000
+XG408;lunes;Milan;Miami;1930;1201;259;644000
+XG409;viernes;Paris;Amsterdam;2100;2008;305;689000
+XG410;viernes;Munich;Lisboa;0900;2107;477;657000
+XG411;jueves;Salvador;Glasgow;1418;2245;440;173000
+XG412;miercoles;Edmonton;Yakarta;0740;1410;333;155000
+XG413;viernes;Nueva York;seul;1042;1547;169;330000
+XG414;viernes;Houston;los Angeles;2213;0656;109;384000
+QP400;martes;Houston;Bangkok;1500;1245;366;120000
+QP401;lunes;Guadalajara;Frankfurt;0204;0442;299;507000
+QP402;lunes;Dublin;Dubai;1454;1751;200;241000
+QP403;lunes;Viena;Vancouver;1337;2111;237;276000
+QP404;viernes;Manila;Monterrey;0634;0118;387;221000
+QP405;miercoles;Guadalajara;Glasgow;1755;1435;490;578000
+QP406;martes;Ciudad de mexico;Varsovia;0917;0838;460;213000
+QP407;martes;Atenas;Salvador;0711;0222;326;183000
+QP408;miercoles;Dublin;Sidney;0250;1356;431;589000
+QP409;viernes;Frankfurt;Houston;1249;1910;395;134000
+QP410;jueves;Lisboa;Salvador;2101;2335;451;571000
+QP411;viernes;seul;Birsbane;0300;1522;490;469000
+QP412;martes;Bangkok;Esmima;1039;0742;347;400000
+QP413;viernes;Taipei;Nueva York;1931;2057;103;135000
+QP414;lunes;Ginebra;Daegu;1549;0818;331;480000
+CF400;viernes;Salvador;Lyon;1205;0825;416;315000
+CF401;viernes;Calgary;los Angeles;2031;1553;166;549000
+CF402;lunes;Buenos Aires;Chicago;0030;0319;349;111000
+CF403;martes;East Rand;Dublin;0508;0207;410;460000
+CF404;lunes;Lille;Taichung;2107;0736;159;697000
+CF405;lunes;Nueva York;Caracas;1207;0351;205;401000
+CF406;jueves;San Diego;Taichung;0425;2132;163;612000
+CF407;lunes;Salvador;Sidney;0759;0012;365;354000
+CF408;martes;Vancouver;Lisboa;1624;2222;418;236000
+CF409;jueves;Ginebra;San Diego;0056;1751;426;157000
+CF410;lunes;Nottingham;Guadalajara;0106;0711;429;416000
+CF411;jueves;Nagoya;Viena;1518;1015;428;488000
+CF412;viernes;Bursa;Oslo;1827;2315;398;537000
+CF413;jueves;San Diego;Chicago;1557;2256;218;399000
+CF414;martes;Salvador;Frankfurt;1128;1335;498;527000
+AK400;martes;San Petersburgo;Bogota;0609;1506;362;443000
+AK401;lunes;Viena;Munich;1720;1955;237;622000
+AK402;miercoles;Helsinki;Lille;0711;0649;206;380000
+AK403;miercoles;Bursa;Paris;1546;1628;248;505000
+AK404;viernes;Edmonton;Pretoria;1407;0023;365;640000
+AK405;viernes;Guadalajara;East Rand;0059;1533;344;658000
+AK406;viernes;San Diego;Bucarest;0800;1729;471;317000
+AK407;viernes;seul;Florencia;1239;1854;351;516000
+AK408;jueves;Taichung;Lille;1448;0730;204;311000
+AK409;martes;Sacramento;seul;1842;0421;284;687000
+AK410;lunes;Bangkok;Amsterdam;1028;0006;272;496000
+AK411;martes;Hiroshima;Bogota;1439;1045;374;646000
+AK412;miercoles;Calcuta;Milan;0730;0627;149;267000
+AK413;jueves;Guadalajara;Chicago;1403;1441;349;277000
+AK414;lunes;Colonia;Calgary;0705;2328;148;472000
+HX400;martes;Toronto;Ginebra;1415;0201;219;510000
+HX401;lunes;Frankfurt;Pekin;2350;1055;321;353000
+HX402;viernes;Brasilia;Johannesburgo;2316;1406;155;318000
+HX403;lunes;Manila;Lille;1802;1418;280;669000
+HX404;martes;Nagoya;perth;0632;1604;350;593000
+HX405;jueves;Pekin;Nueva York;1340;1201;211;638000
+HX406;miercoles;Sacramento;shaghai;1532;1812;419;459000
+HX407;lunes;Basilea;osaka;1542;0255;107;294000
+HX408;miercoles;Daegu;Almaty;0407;0944;288;557000
+HX409;lunes;Amsterdam;Caracas;1342;1044;408;136000
+HX410;miercoles;Sacramento;Nagoya;1632;1814;213;431000
+HX411;miercoles;Nueva York;El Cairo;1527;1520;396;443000
+HX412;lunes;San Francisco;Fukuoka;1312;0724;251;699000
+HX413;viernes;Johannesburgo;Johannesburgo;2347;0400;491;313000
+HX414;viernes;Salvador;Johannesburgo;2051;1851;243;693000
+LU400;jueves;Napoles;El Cairo;0556;0253;236;483000
+LU401;miercoles;Houston;Edmonton;0059;0955;156;180000
+LU402;martes;Amsterdam;Londres;0129;0213;108;173000
+LU403;martes;Lille;Amsterdam;0125;0501;148;485000
+LU404;lunes;Glasgow;Florencia;0155;2157;330;222000
+LU405;miercoles;Esmima;Helsinki;2153;1420;450;312000
+LU406;lunes;Dublin;San Francisco;1921;0713;341;618000
+LU407;miercoles;Nottingham;Manila;1621;0201;284;126000
+LU408;miercoles;Paris;Amsterdam;2220;1807;461;338000
+LU409;miercoles;Toronto;Almaty;0032;0234;364;431000
+LU410;miercoles;Tokio;Ginebra;1322;2027;308;378000
+LU411;martes;Pretoria;Bursa;0248;1227;408;602000
+LU412;martes;Hiroshima;Calcuta;2214;0022;317;337000
+LU413;lunes;Ginebra;Londres;0917;0853;180;565000
+LU414;martes;Helsinki;Turin;0216;1927;205;603000
+NE400;martes;Viena;El Cairo;1147;0232;147;184000
+NE401;viernes;Rio de Janeiro;Esmima;0936;0413;363;416000
+NE402;jueves;Lille;Ciudad de mexico;1222;1030;413;462000
+NE403;miercoles;Harbin;Taichung;2255;0018;213;249000
+NE404;miercoles;Praga;Taipei;0530;1629;113;125000
+NE405;martes;Moscu;San Francisco;0017;0010;487;394000
+NE406;miercoles;Hiroshima;Harbin;0555;2206;316;139000
+NE407;miercoles;Nottingham;Harbin;2151;0958;371;389000
+NE408;viernes;San Francisco;Paris;1000;1810;212;622000
+NE409;miercoles;Bangkok;Esmima;0853;2129;467;516000
+NE410;miercoles;Viena;Salvador;1049;1041;103;273000
+NE411;miercoles;Birsbane;East Rand;1448;2106;272;143000
+NE412;miercoles;Zurich;Nueva York;0153;1544;144;310000
+NE413;jueves;Calcuta;Esmima;1321;1750;298;625000
+NE414;miercoles;Phoenix;Ginebra;1417;0849;258;328000
+WB400;viernes;Edmonton;El Cairo;2055;2052;294;631000
+WB401;jueves;seul;Lisboa;1258;0059;389;411000
+WB402;lunes;Hong kong;Bucarest;0815;0859;470;346000
+WB403;viernes;Pretoria;Napoles;2214;2302;129;468000
+WB404;lunes;Fukuoka;Daegu;1051;1624;477;366000
+WB405;miercoles;Miami;Buenos Aires;0513;0858;314;284000
+WB406;miercoles;Bogota;Bangkok;1814;0340;140;228000
+WB407;lunes;Chicago;Moscu;1645;1359;500;628000
+WB408;miercoles;Nagoya;Phoenix;2038;0845;271;197000
+WB409;martes;Lille;Harbin;1203;0743;350;200000
+WB410;viernes;El Cairo;Phoenix;0753;0130;162;109000
+WB411;martes;Brasilia;Hong kong;0804;2003;492;235000
+WB412;miercoles;Phoenix;Birsbane;1146;2137;333;402000
+WB413;viernes;Atenas;Yakarta;0507;0729;305;543000
+WB414;miercoles;Tokio;Calcuta;0401;2230;478;544000
+JI400;lunes;Almaty;Basilea;0814;1121;335;622000
+JI401;viernes;Calcuta;Calgary;0931;0544;200;286000
+JI402;martes;Yakarta;Salvador;2210;2313;221;484000
+JI403;viernes;Paris;Oslo;0611;0746;292;393000
+JI404;miercoles;Glasgow;Lisboa;0535;0041;379;150000
+JI405;miercoles;seul;Bucarest;1328;2333;416;427000
+JI406;miercoles;Munich;Basilea;0818;1602;403;647000
+JI407;martes;Lille;Miami;0722;0828;266;563000
+JI408;viernes;Almaty;Glasgow;0856;0830;287;640000
+JI409;lunes;Glasgow;Dubai;1014;1225;255;623000
+JI410;jueves;Tokio;Paris;1528;1511;483;323000
+JI411;miercoles;Hiroshima;Glasgow;1906;0007;421;162000
+JI412;miercoles;Basilea;Bucarest;1456;0825;191;331000
+JI413;jueves;Londres;Milan;1826;0520;444;494000
+JI414;jueves;Buenos Aires;Johannesburgo;2114;2005;427;699000
+QV400;miercoles;San Petersburgo;osaka;0040;1609;257;315000
+QV401;jueves;Miami;Chicago;0655;1237;209;308000
+QV402;viernes;Yakarta;Munich;0604;1422;254;266000
+QV403;lunes;Napoles;Brasilia;0802;2355;452;170000
+QV404;miercoles;Turin;Sidney;1602;0259;163;692000
+QV405;lunes;Vancouver;Varsovia;0032;0019;324;194000
+QV406;lunes;Praga;Johannesburgo;1235;1747;265;148000
+QV407;lunes;Bogota;Esmima;0200;1755;123;177000
+QV408;jueves;Fukuoka;Chicago;2257;1813;200;162000
+QV409;lunes;Napoles;San Petersburgo;1150;1255;321;591000
+QV410;miercoles;seul;Hong kong;1009;0846;110;509000
+QV411;jueves;Lisboa;Miami;0931;0702;482;493000
+QV412;jueves;Fukuoka;Phoenix;1950;0902;327;174000
+QV413;miercoles;Durban;Munich;0707;1416;103;257000
+QV414;jueves;Frankfurt;East Rand;1842;1845;247;292000
+QT400;viernes;San Petersburgo;Sacramento;2241;1557;322;622000
+QT401;martes;Nagoya;los Angeles;0433;1222;194;677000
+QT402;jueves;Oslo;Daegu;1651;0509;173;576000
+QT403;martes;seul;Edmonton;0945;0003;164;505000
+QT404;miercoles;San Francisco;Nottingham;0353;1048;298;688000
+QT405;martes;Zurich;perth;1050;0814;304;118000
+QT406;miercoles;Atenas;Phoenix;0406;1605;376;461000
+QT407;miercoles;Amsterdam;San Petersburgo;0317;1633;388;566000
+QT408;viernes;Chicago;Nueva York;0738;1749;204;608000
+QT409;jueves;Bucarest;Sacramento;1048;2231;393;164000
+QT410;martes;Vancouver;Helsinki;1412;1107;133;662000
+QT411;viernes;Chicago;Bangkok;2024;0540;166;411000
+QT412;jueves;Calcuta;Johannesburgo;1804;2120;138;466000
+QT413;viernes;Durban;Lille;0730;0256;379;303000
+QT414;jueves;Buenos Aires;Monterrey;0845;0925;363;134000
+MK400;jueves;Salvador;El Cairo;1930;1407;107;324000
+MK401;miercoles;Basilea;Hiroshima;0153;2013;120;235000
+MK402;lunes;Johannesburgo;Phoenix;2214;1405;169;319000
+MK403;miercoles;Buenos Aires;Glasgow;0959;0027;223;193000
+MK404;martes;Ciudad de mexico;Ginebra;0640;0752;223;399000
+MK405;lunes;San Diego;Harbin;1038;2115;296;687000
+MK406;martes;San Petersburgo;Manila;0259;0954;359;419000
+MK407;miercoles;Varsovia;Amsterdam;1042;0539;458;138000
+MK408;martes;Monterrey;Nagoya;0929;0124;115;468000
+MK409;lunes;Pekin;Pretoria;0644;1330;108;629000
+MK410;jueves;Almaty;Edmonton;0952;2026;391;502000
+MK411;martes;Basilea;Lyon;0617;1411;403;455000
+MK412;jueves;Nagoya;Bucarest;0625;1012;376;649000
+MK413;viernes;Turin;Viena;2251;1909;466;103000
+MK414;lunes;Hiroshima;Glasgow;1622;1656;204;669000
+KD400;martes;seul;Moscu;1006;1626;125;173000
+KD401;miercoles;Johannesburgo;seul;1342;0051;315;284000
+KD402;miercoles;Munich;Lille;0916;1509;126;652000
+KD403;viernes;Londres;San Diego;1710;1440;354;570000
+KD404;martes;Vancouver;Ginebra;0111;2237;251;302000
+KD405;miercoles;Yakarta;Nueva York;0449;1952;214;662000
+KD406;lunes;Taipei;Viena;2046;1432;439;363000
+KD407;jueves;Atenas;Salvador;2258;1914;204;538000
+KD408;jueves;Hiroshima;Lisboa;0718;2206;375;511000
+KD409;miercoles;Varsovia;Phoenix;0145;0418;247;183000
+KD410;viernes;Varsovia;Praga;0100;0805;167;226000
+KD411;jueves;perth;Bursa;0102;1053;135;407000
+KD412;lunes;East Rand;Chicago;1921;1758;273;188000
+KD413;miercoles;Frankfurt;Johannesburgo;0149;0045;396;251000
+KD414;martes;Glasgow;Tokio;1947;1636;338;514000
+OO400;lunes;Paris;Paris;1808;0815;456;643000
+OO401;viernes;Paris;Dubai;0339;0249;160;693000
+OO402;miercoles;Johannesburgo;Johannesburgo;1125;0306;275;288000
+OO403;lunes;Johannesburgo;Pretoria;1643;1943;256;367000
+OO404;miercoles;Vancouver;Budapest;0106;0739;299;657000
+OO405;jueves;Dublin;Paris;0025;1658;263;380000
+OO406;lunes;Birsbane;Caracas;1703;2142;250;458000
+OO407;miercoles;Oslo;Vancouver;0820;1326;382;309000
+OO408;jueves;Londres;Almaty;1053;1545;388;133000
+OO409;viernes;shaghai;San Petersburgo;2026;0527;145;335000
+OO410;miercoles;Napoles;Frankfurt;2226;0504;287;437000
+OO411;jueves;Manila;Nueva York;0337;1856;201;362000
+OO412;viernes;Ginebra;perth;1041;0939;309;579000
+OO413;martes;Budapest;Nueva York;0657;0836;228;178000
+OO414;martes;Sacramento;Milan;0037;1924;147;453000
+CJ400;lunes;Salvador;Buenos Aires;1716;2357;198;632000
+CJ401;miercoles;Londres;Nagoya;0406;0321;371;674000
+CJ402;miercoles;East Rand;Bogota;2004;0111;315;145000
+CJ403;viernes;Sidney;Zurich;1810;0859;262;438000
+CJ404;viernes;Londres;Budapest;0204;2140;213;687000
+CJ405;viernes;Durban;Munich;1500;0040;188;612000
+CJ406;viernes;Budapest;Salvador;1625;2029;252;316000
+CJ407;lunes;perth;Ciudad de mexico;0315;1234;395;645000
+CJ408;martes;Viena;Praga;0830;1242;377;306000
+CJ409;jueves;Manila;Londres;2129;1616;363;197000
+CJ410;viernes;Birsbane;Nagoya;0348;1339;256;531000
+CJ411;miercoles;Zurich;Basilea;0711;1118;325;353000
+CJ412;miercoles;perth;Fukuoka;1112;2241;352;585000
+CJ413;viernes;Lyon;El Cairo;2237;2226;371;410000
+CJ414;viernes;Vancouver;Milan;0249;0014;394;400000
+BQ400;viernes;Lyon;Amsterdam;1812;2046;247;697000
+BQ401;jueves;Milan;Ciudad de mexico;1711;1854;453;415000
+BQ402;jueves;Fukuoka;San Francisco;0819;1244;101;327000
+BQ403;jueves;Sidney;East Rand;0136;0156;116;495000
+BQ404;martes;Londres;Moscu;1313;0711;430;283000
+BQ405;jueves;Helsinki;Zurich;1311;1703;453;217000
+BQ406;lunes;Bangkok;Lille;0422;1102;322;297000
+BQ407;jueves;Oslo;seul;0207;2348;264;554000
+BQ408;miercoles;Florencia;Miami;0759;0124;466;486000
+BQ409;lunes;Esmima;Milan;0052;0304;257;550000
+BQ410;lunes;Amsterdam;Johannesburgo;2246;1408;111;472000
+BQ411;viernes;Bursa;Atenas;2353;1433;494;377000
+BQ412;miercoles;Sacramento;Caracas;0614;0942;220;680000
+BQ413;viernes;Varsovia;Bogota;1700;0252;280;233000
+BQ414;viernes;Lille;Hiroshima;1835;1733;215;113000
+XM400;viernes;Munich;osaka;1503;0821;330;637000
+XM401;jueves;Brasilia;Hong kong;0410;1722;390;268000
+XM402;jueves;Salvador;Napoles;1637;0128;199;529000
+XM403;viernes;Londres;Johannesburgo;0950;2316;476;189000
+XM404;lunes;Salvador;Nueva York;0441;0011;156;284000
+XM405;lunes;Phoenix;Budapest;2108;1908;418;208000
+XM406;martes;Vancouver;Bangkok;0054;0845;342;147000
+XM407;martes;los Angeles;Bursa;2303;0453;298;210000
+XM408;viernes;Calgary;Nueva York;2325;1725;400;669000
+XM409;viernes;Hiroshima;seul;1636;0112;293;360000
+XM410;lunes;Hiroshima;Hiroshima;0253;2003;143;516000
+XM411;lunes;shaghai;Hiroshima;1939;1030;168;633000
+XM412;martes;Paris;Napoles;0948;0038;380;522000
+XM413;jueves;Ginebra;Chicago;0015;1810;343;532000
+XM414;lunes;Bangkok;Bogota;1812;0129;154;506000
+FU400;martes;Praga;Lyon;0220;1726;313;672000
+FU401;viernes;Nueva York;Turin;0312;0951;332;669000
+FU402;viernes;Zurich;Varsovia;1031;1205;180;675000
+FU403;lunes;Florencia;Taipei;0215;1405;465;575000
+FU404;lunes;Toronto;Viena;1952;0600;273;662000
+FU405;jueves;Yakarta;Miami;0735;1505;218;518000
+FU406;viernes;Zurich;shaghai;2221;2210;453;326000
+FU407;martes;los Angeles;Lille;0350;1621;154;488000
+FU408;miercoles;Brasilia;Helsinki;0742;2050;409;478000
+FU409;martes;Dublin;Bursa;2014;1514;227;320000
+FU410;miercoles;Monterrey;Lille;1458;1507;431;637000
+FU411;viernes;Ginebra;East Rand;1356;1332;244;297000
+FU412;miercoles;Dubai;Atenas;1732;2041;200;319000
+FU413;lunes;Milan;Edmonton;0237;1955;183;434000
+FU414;lunes;Paris;Phoenix;1148;0704;141;380000
+RD400;viernes;San Diego;Paris;0643;0047;297;683000
+RD401;martes;Frankfurt;Miami;1842;1334;251;265000
+RD402;jueves;Chicago;Oslo;2108;1412;413;622000
+RD403;viernes;osaka;Lyon;0128;0841;172;249000
+RD404;miercoles;Lisboa;Manila;2102;1345;195;435000
+RD405;viernes;Miami;Bursa;2311;0313;444;417000
+RD406;lunes;Zurich;Daegu;0835;1605;322;465000
+RD407;miercoles;Basilea;Edmonton;2127;1805;121;228000
+RD408;miercoles;Glasgow;Nueva York;0248;0301;323;458000
+RD409;lunes;Houston;Florencia;1305;1553;420;262000
+RD410;miercoles;East Rand;Guadalajara;0039;1726;171;616000
+RD411;viernes;Chicago;San Diego;1815;2018;355;419000
+RD412;miercoles;Paris;Guadalajara;0644;1533;488;561000
+RD413;viernes;Tokio;Budapest;1912;0337;100;432000
+RD414;viernes;Ginebra;San Francisco;1620;1335;447;562000
+NK400;jueves;Frankfurt;Houston;1616;0117;375;140000
+NK401;martes;Daegu;Turin;1826;1756;475;112000
+NK402;martes;Nagoya;Calgary;0411;1350;253;697000
+NK403;lunes;Rio de Janeiro;Caracas;0327;1416;219;240000
+NK404;lunes;Esmima;Amsterdam;2143;0653;144;249000
+NK405;miercoles;Brasilia;Daegu;0836;1000;339;330000
+NK406;lunes;Salvador;San Francisco;0901;1843;324;485000
+NK407;lunes;Johannesburgo;Taipei;1909;0945;387;509000
+NK408;viernes;Esmima;Zurich;1408;1823;273;539000
+NK409;jueves;Munich;shaghai;1739;2123;362;158000
+NK410;jueves;Rio de Janeiro;San Petersburgo;0556;1358;244;348000
+NK411;lunes;Hong kong;Florencia;2137;0738;302;492000
+NK412;lunes;Viena;Esmima;0702;1305;479;697000
+NK413;jueves;Bucarest;Sacramento;1237;0934;412;341000
+NK414;martes;Amsterdam;Nagoya;1956;0808;121;563000
+IP400;miercoles;Nagoya;Edmonton;0951;1527;470;123000
+IP401;martes;Lisboa;Florencia;0102;1104;330;302000
+IP402;martes;Houston;Brasilia;2227;1145;370;700000
+IP403;miercoles;Praga;Durban;0231;1226;336;155000
+IP404;martes;Harbin;Hiroshima;2047;0122;246;572000
+IP405;viernes;Guadalajara;Phoenix;1903;0138;492;289000
+IP406;lunes;Sidney;Frankfurt;1026;0816;417;405000
+IP407;jueves;Praga;Basilea;1759;1601;278;265000
+IP408;miercoles;Durban;Frankfurt;0726;0442;305;506000
+IP409;miercoles;Calcuta;Paris;2233;1633;112;324000
+IP410;viernes;Frankfurt;los Angeles;1218;2035;332;692000
+IP411;lunes;Dublin;Moscu;1045;0113;175;491000
+IP412;jueves;Paris;Oslo;1916;2257;291;132000
+IP413;viernes;Salvador;Yakarta;0142;0253;193;276000
+IP414;miercoles;Oslo;El Cairo;2236;2223;187;224000
+MH400;martes;Birsbane;Moscu;1926;0053;269;119000
+MH401;lunes;Sidney;Turin;0545;0836;206;523000
+MH402;jueves;Edmonton;perth;1145;1215;380;367000
+MH403;jueves;Nueva York;Houston;2130;0914;132;290000
+MH404;jueves;perth;Helsinki;2205;0551;283;655000
+MH405;lunes;Munich;Moscu;2142;1039;490;686000
+MH406;martes;Houston;Daegu;0813;1416;430;665000
+MH407;miercoles;Zurich;Lille;0556;0046;481;553000
+MH408;lunes;Bogota;Nagoya;0158;0120;207;569000
+MH409;martes;Londres;Almaty;0329;0153;152;368000
+MH410;lunes;Yakarta;Toronto;1846;0555;331;255000
+MH411;viernes;Bucarest;Monterrey;0001;0728;458;377000
+MH412;lunes;Houston;Vancouver;0751;0630;204;156000
+MH413;viernes;Pekin;Dubai;0027;1624;440;165000
+MH414;miercoles;Esmima;Ciudad de mexico;1759;0717;156;309000
+SO400;lunes;Oslo;Bursa;0837;2327;397;368000
+SO401;jueves;Harbin;Londres;1338;1742;194;640000
+SO402;martes;los Angeles;Miami;2226;0411;409;469000
+SO403;viernes;Pekin;Calgary;2044;0107;366;138000
+SO404;miercoles;San Petersburgo;Hong kong;1352;1417;246;183000
+SO405;viernes;Frankfurt;Vancouver;1635;0523;389;641000
+SO406;lunes;Glasgow;perth;0949;0139;229;361000
+SO407;viernes;Calgary;Amsterdam;1502;0944;418;291000
+SO408;martes;Fukuoka;Sidney;0224;0008;249;694000
+SO409;viernes;El Cairo;Durban;1311;0321;220;108000
+SO410;martes;Brasilia;Tokio;0916;2258;171;214000
+SO411;viernes;Zurich;Bangkok;2106;2040;230;108000
+SO412;martes;Bursa;Bogota;0305;1637;307;333000
+SO413;martes;Brasilia;shaghai;0901;0128;183;584000
+SO414;viernes;Florencia;San Petersburgo;1640;0144;477;239000
+YB400;jueves;Fukuoka;San Diego;1604;0432;382;648000
+YB401;lunes;Bursa;Nottingham;1656;0235;473;107000
+YB402;miercoles;Londres;Turin;0246;2343;243;305000
+YB403;lunes;Florencia;Amsterdam;0223;1122;149;525000
+YB404;lunes;Rio de Janeiro;Taipei;1830;1558;483;558000
+YB405;miercoles;Miami;Fukuoka;0607;1041;374;674000
+YB406;viernes;Ciudad de mexico;Paris;0600;0843;355;489000
+YB407;lunes;Varsovia;Miami;0612;1546;473;485000
+YB408;martes;Harbin;Basilea;0356;0239;269;371000
+YB409;lunes;Daegu;Bucarest;0216;1409;110;422000
+YB410;viernes;Lisboa;Glasgow;0158;2029;133;341000
+YB411;miercoles;East Rand;Turin;2354;0706;397;346000
+YB412;jueves;Birsbane;Viena;2306;2017;345;546000
+YB413;lunes;perth;Buenos Aires;2337;0802;320;142000
+YB414;jueves;Taichung;Turin;2031;0639;223;371000
+MY400;miercoles;Daegu;shaghai;0025;0725;155;586000
+MY401;jueves;Rio de Janeiro;Pekin;1706;0840;119;215000
+MY402;lunes;Sidney;Dubai;0020;1546;325;303000
+MY403;viernes;Frankfurt;Calcuta;0547;2324;393;139000
+MY404;lunes;Guadalajara;Vancouver;1752;2331;455;552000
+MY405;jueves;Milan;Vancouver;0720;1922;143;120000
+MY406;martes;Phoenix;Sidney;1413;1856;192;228000
+MY407;martes;Fukuoka;Munich;0327;1052;434;408000
+MY408;lunes;Buenos Aires;Houston;1116;0737;462;499000
+MY409;jueves;seul;Houston;2353;1709;450;137000
+MY410;martes;Sacramento;Ginebra;0747;0741;401;700000
+MY411;lunes;Lyon;Houston;2115;1354;180;114000
+MY412;lunes;San Petersburgo;Durban;0412;1303;203;426000
+MY413;martes;Paris;Praga;1606;0822;110;648000
+MY414;martes;Monterrey;San Francisco;1402;0914;337;540000
+RM400;viernes;Sacramento;Viena;1559;0949;483;656000
+RM401;miercoles;Bucarest;Pretoria;2029;0515;190;218000
+RM402;lunes;Yakarta;Chicago;1036;2147;478;419000
+RM403;jueves;Pekin;Dublin;2301;1018;425;352000
+RM404;viernes;Vancouver;East Rand;1228;0310;337;380000
+RM405;viernes;East Rand;El Cairo;1242;0126;287;391000
+RM406;lunes;Guadalajara;Lille;1513;0546;234;187000
+RM407;martes;Bogota;Tokio;1308;0445;490;663000
+RM408;jueves;Praga;El Cairo;0019;0451;196;544000
+RM409;viernes;Viena;Pretoria;0918;1624;333;230000
+RM410;martes;Dubai;Bursa;0818;1647;277;206000
+RM411;jueves;Calcuta;Taipei;1627;1720;109;404000
+RM412;martes;Lille;Johannesburgo;0545;0141;164;221000
+RM413;martes;Londres;San Petersburgo;2054;1806;110;301000
+RM414;miercoles;Bangkok;El Cairo;1451;0111;162;464000
+BW400;martes;Rio de Janeiro;Houston;1832;1740;232;361000
+BW401;lunes;Yakarta;Brasilia;0656;0924;106;659000
+BW402;lunes;Almaty;Praga;0552;2346;140;277000
+BW403;martes;Milan;Sacramento;0819;1059;452;546000
+BW404;jueves;Birsbane;Birsbane;1410;0807;104;219000
+BW405;lunes;Pretoria;Turin;1846;0654;260;551000
+BW406;viernes;Hiroshima;Praga;1336;1110;282;269000
+BW407;martes;Calcuta;Toronto;1448;0842;135;182000
+BW408;viernes;El Cairo;Glasgow;0427;1619;388;121000
+BW409;miercoles;Calgary;East Rand;0317;2042;217;572000
+BW410;lunes;Glasgow;Bangkok;1120;0716;418;596000
+BW411;jueves;Atenas;Amsterdam;1304;0921;110;629000
+BW412;miercoles;Caracas;Dubai;1405;1657;186;369000
+BW413;miercoles;Brasilia;Manila;0920;0941;364;262000
+BW414;lunes;Almaty;Johannesburgo;1409;1018;330;687000
+RX400;miercoles;Birsbane;Pekin;1157;0021;421;569000
+RX401;martes;Monterrey;Basilea;0734;1319;436;551000
+RX402;viernes;Bucarest;Hiroshima;2358;0916;370;554000
+RX403;miercoles;Munich;Praga;1011;0140;304;672000
+RX404;lunes;San Francisco;Glasgow;0626;0420;275;135000
+RX405;martes;Toronto;Frankfurt;0911;1843;259;697000
+RX406;jueves;Tokio;Sacramento;0329;0057;408;484000
+RX407;jueves;Chicago;Milan;1917;0152;187;612000
+RX408;lunes;Pretoria;Lyon;0050;2036;213;104000
+RX409;miercoles;Johannesburgo;Dubai;2335;0807;412;699000
+RX410;martes;perth;Hiroshima;2342;0101;488;123000
+RX411;lunes;Taichung;Dublin;0205;1128;205;279000
+RX412;viernes;East Rand;Buenos Aires;1254;2333;123;349000
+RX413;lunes;Londres;Tokio;0654;0845;198;271000
+RX414;jueves;Nottingham;Lyon;1611;0704;407;405000
