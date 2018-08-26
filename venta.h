@@ -1,7 +1,6 @@
 #ifndef __VENTA__H__
 #define __VENTA__H__
 #include <string.h>
-#include "agencia.h"
 
 using namespace std;
 
@@ -9,9 +8,8 @@ using namespace std;
 class Venta {
 
 private:
-		string agencia;
 		string codigo;
-		string vuelo;
+		string ruta;
 		string idComprador;
 		string nombre;
 		int fechavuelo;
@@ -19,17 +17,15 @@ private:
 		int hrcompra;
 
 public:
-		void setAgencia(string agenciaIn);
 		void setCodigo(string codigoIn);
-		void setVuelo(string vueloIn);
+		void setRuta(string rutaIn);
 		void setIdcomprador(string idCompradorIn);
 		void setNombre(string nombreIn);
 		void setFechavuelo(int fechavueloIn);
-		void setFechacimpra(int fechacompraIn);
+		void setFechacompra(int fechacompraIn);
 		void setHrcompra(int hrcompraIn);
-		string getAgencia();
 		string getCodigo();
-		string getVuelo();
+		string getRuta();
 		string getIdComprador();
 		string getNombre();
 		int getFechavuelo();
@@ -37,5 +33,5 @@ public:
 		int getHrcompra();
 };
 
-// #include "venta.hpp"
+#include "venta.hxx"
 #endif
