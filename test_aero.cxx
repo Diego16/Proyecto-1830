@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 		list<Venta*> tVentas;
 		list<Vuelo*> tVuelos;
 		bool on = true, logged = false;
-		string cmdInput = " ", input = " ";
+		string cmdInput = " ", input = " ", input1 = " ";
 		char command[300] = {' '};
 		if(argc<4||argc>4)
 		{
@@ -35,10 +35,11 @@ int main(int argc, char* argv[])
 		loadFlights(argv[1],tRutas);
 		loadSells(argv[2],tVuelos,tRutas,tVentas);
 		loadAgencies(argv[3],tAgencias);
-
 		while(on)
 		{
 				cout << "$ ";
+				cin.clear();
+				cin.sync();
 				cin.getline(command,300);
 				char* piece;
 				char* cmdList[10];
@@ -56,30 +57,45 @@ int main(int argc, char* argv[])
 						{
 								cmdInput = cmdList[1];
 								cout << "Contraseña: ";
-								cin.ignore();
-								cin >> input;
-								cout << "main: " << input << endl;
+								cin.clear();
+								cin.sync();
+								getline(cin,input);
 								logged = validateSession(cmdInput,input,tAgencias);
 								if(!logged)
-								{
-										cout << "Usuario o contraseña incorrectos, intente de nuevo" << endl;
-								}
+										cout << "* Usuario o contraseña incorrectos, intente de nuevo *" << endl;
 						}
 						else
-						{
 								cout << "Parametros invalidos" << endl;
-						}
 				}
 				else if(strcmp(cmdList[0],"report")==0 && logged)
 				{
-						if (cantCmd==1)
+						if (cantCmd>=2)
 						{
+								cmdInput = cmdList[1];
+								if(cmdInput=="flights")
+								{
+										if(cantCmd==3)
+												input = cmdList[2];
+										else if(cantCmd==4)
+										{
+												input = cmdList[2];
+												input1 = cmdList[3];
+										}
+										else
+										{
+												input = "N";
+												input1 = "N";
+										}
+								}
+								else if(cmdInput=="inventory")
+								{
 
+								}
+								else
+										cout << "Parametros invalidos" << endl;
 						}
 						else
-						{
 								cout << "Parametros invalidos" << endl;
-						}
 				}
 				else if(strcmp(cmdList[0],"sell")==0 && logged)
 				{
@@ -88,16 +104,12 @@ int main(int argc, char* argv[])
 
 						}
 						else
-						{
 								cout << "Parametros invalidos" << endl;
-						}
 				}
 				else if(strcmp(cmdList[0],"help")==0 && !logged)
 				{
 						if (cantCmd==1)
-						{
 								cout << endl << "Comandos disponibles: " << endl << "   login" << endl << "   exit" << endl;
-						}
 						else if (cantCmd==2)
 						{
 								cmdInput = cmdList[1];
@@ -110,9 +122,7 @@ int main(int argc, char* argv[])
 				else if(strcmp(cmdList[0],"help")==0 && logged)
 				{
 						if (cantCmd==1)
-						{
 								cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   sell" << endl << "   logout" << endl << "   exit" << endl;
-						}
 						else if (cantCmd>=2)
 						{
 								cmdInput = cmdList[1];
@@ -130,22 +140,13 @@ int main(int argc, char* argv[])
 						}
 				}
 				else if(strcmp(cmdList[0],"exit")==0)
-				{
 						return 0;
-				}
 				else if(strcmp(cmdList[0],"logout")==0)
-				{
 						logged = false;
-				}
-
 				else if(strcmp(cmdList[0],"login")!=0 && !logged)
-				{
 						cout << "*** Por favor ingrese su usuario y contraseña para continuar ***" << endl;
-				}
 				else
-				{
 						cout << "*** Comando no valido ***" << endl;
-				}
 		}
 		return 0;
 }
@@ -154,7 +155,6 @@ bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
 {
 		for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
 		{
-				cout << "Pass " << (*it)->getPass() << " input: " << input << endl;
 				if(((*it)->getNombre()==cmdInput) && ((*it)->getPass()==input))
 				{
 						return true;
@@ -222,6 +222,7 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 		string line;
 		ifstream myfile(nombreArchivo.c_str());
 		vector<string> tokenizedLine;
+		int fallosExist = 0, fallosSeat = 0;
 		if (myfile.is_open())
 		{
 				int i = 0;
@@ -240,9 +241,9 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 						newSell->setHrcompra(stoi(tokenizedLine[0]));
 						aux = checkVuelo(newSell->getFechavuelo(),findRuta(newSell->getRuta(),tRutas),tVuelos);
 						if(aux->getDisponibles()==-1)
-								cout << "La venta " << newSell->getCodigo() << " no fue registrada -> no hay sillas disponibles" << endl;
+								fallosSeat++;
 						else if(aux->getDisponibles()==-2)
-								cout << "La venta " << newSell->getCodigo() << " no fue registrada -> la ruta " << newSell->getRuta() << " no existe" << endl;
+								fallosExist++;
 						else
 						{
 								tVentas.push_back(newSell);
@@ -253,6 +254,10 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 		else
 				return false;
 		myfile.close();
+		if(fallosSeat>0)
+				cerr << "No se registraron " << fallosSeat << " ventas, los vuelos no tenian sillas disponibles" << endl;
+		if(fallosExist>0)
+				cerr << "No se registraron " << fallosExist << " ventas, la ruta no existe" << endl;
 		return true;
 }
 Vuelo* checkVuelo(int Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
@@ -279,7 +284,6 @@ Vuelo* checkVuelo(int Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 						}
 				}
 		}
-		//TODO:If fligth doesn't exist create a new one and return it
 		aux->setRuta(Lruta);
 		aux->setFecha(Lfecha);
 		aux->setDisponibles(Lruta->getSillas() - 1);
@@ -298,26 +302,28 @@ Ruta* findRuta(string Lcode, list<Ruta*> &tRutas)
 		aux->setCodigo("0");
 		return aux;
 }
-Venta* Vender(vector <string> tokenizedLine, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas)
-{
-		Venta* newSell;
-		Vuelo* aux;
-		newSell->setCodigo(tokenizedLine[6]);
-		newSell->setRuta(tokenizedLine[5]);
-		newSell->setIdcomprador(tokenizedLine[4]);
-		newSell->setNombre(tokenizedLine[3]);
-		newSell->setFechavuelo(stoi(tokenizedLine[2]));
-		newSell->setFechacompra(stoi(tokenizedLine[1]));
-		newSell->setHrcompra(stoi(tokenizedLine[0]));
-		aux = checkVuelo(newSell->getFechavuelo(),findRuta(newSell->getRuta(),tRutas),tVuelos);
-		if(aux->getDisponibles()==-1)
-				cout << "La venta " << newSell->getCodigo() << " no fue registrada -> no hay sillas disponibles" << endl;
-		else if(aux->getDisponibles()==-2)
-				cout << "La venta " << newSell->getCodigo() << " no fue registrada -> la ruta no existe" << endl;
-		else
-				tVentas.push_back(newSell);
-		return newSell;
-}
+/*
+   Venta* Vender(vector <string> tokenizedLine, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas)
+   {
+        Venta* newSell;
+        Vuelo* aux;
+        newSell->setCodigo(tokenizedLine[6]);
+        newSell->setRuta(tokenizedLine[5]);
+        newSell->setIdcomprador(tokenizedLine[4]);
+        newSell->setNombre(tokenizedLine[3]);
+        newSell->setFechavuelo(stoi(tokenizedLine[2]));
+        newSell->setFechacompra(stoi(tokenizedLine[1]));
+        newSell->setHrcompra(stoi(tokenizedLine[0]));
+        aux = checkVuelo(newSell->getFechavuelo(),findRuta(newSell->getRuta(),tRutas),tVuelos);
+        if(aux->getDisponibles()==-1)
+                cout << "La venta " << newSell->getCodigo() << " no fue registrada -> no hay sillas disponibles" << endl;
+        else if(aux->getDisponibles()==-2)
+                cout << "La venta " << newSell->getCodigo() << " no fue registrada -> la ruta no existe" << endl;
+        else
+                tVentas.push_back(newSell);
+        return newSell;
+   }
+ */
 vector<string> tokenizer(string toTokenize, char token)
 {
 		vector<string> tokenizedLine;
@@ -334,7 +340,7 @@ vector<string> tokenizer(string toTokenize, char token)
 				aux += toTokenize[i];
 				i++;
 		}
-		aux.resize(aux.size() - 1);
+		aux.resize(aux.size() - 2);
 		tokenizedLine.insert(tokenizedLine.begin(), aux );
 		return tokenizedLine;
 }
