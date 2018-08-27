@@ -284,8 +284,8 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 }
 bool Vender(string idRuta, int fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
 {
-		Venta* newSell;
-		Vuelo* aux;
+		Venta* newSell = new Venta();
+		Vuelo* aux = new Vuelo();
 		int fecha = 0, hora = 0;
 		string ID = " ", nombre = " ";
 		time_t t = std::time(0);
