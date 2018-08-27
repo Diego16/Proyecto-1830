@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #include <list>
 #include <vector>
 #include <fstream>
@@ -33,16 +33,9 @@ int main(int argc, char* argv[])
 				return 1;
 		}
 		loadFlights(argv[1],tRutas);
-		for(list<Ruta*>::iterator it = tRutas.begin(); it!=tRutas.end(); it++)
-		{
-				cout << "Ruta " << (*it)->getCodigo() << endl;
-		}
 		loadSells(argv[2],tVuelos,tRutas,tVentas);
 		loadAgencies(argv[3],tAgencias);
-		for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
-		{
-				cout << "Agencia " << (*it)->getNombre() << " " << (*it)->getPass() << endl;
-		}
+
 		while(on)
 		{
 				cout << "$ ";
@@ -63,7 +56,9 @@ int main(int argc, char* argv[])
 						{
 								cmdInput = cmdList[1];
 								cout << "Contraseña: ";
+								cin.ignore();
 								cin >> input;
+								cout << "main: " << input << endl;
 								logged = validateSession(cmdInput,input,tAgencias);
 								if(!logged)
 								{
@@ -75,7 +70,18 @@ int main(int argc, char* argv[])
 								cout << "Parametros invalidos" << endl;
 						}
 				}
-				else if(strcmp(cmdList[0],"")==0 && logged)
+				else if(strcmp(cmdList[0],"report")==0 && logged)
+				{
+						if (cantCmd==1)
+						{
+
+						}
+						else
+						{
+								cout << "Parametros invalidos" << endl;
+						}
+				}
+				else if(strcmp(cmdList[0],"sell")==0 && logged)
 				{
 						if (cantCmd==1)
 						{
@@ -124,11 +130,22 @@ int main(int argc, char* argv[])
 						}
 				}
 				else if(strcmp(cmdList[0],"exit")==0)
-						on = false;
-				else if(!logged && strcmp(cmdList[0],"login")!=0)
+				{
+						return 0;
+				}
+				else if(strcmp(cmdList[0],"logout")==0)
+				{
+						logged = false;
+				}
+
+				else if(strcmp(cmdList[0],"login")!=0 && !logged)
+				{
 						cout << "*** Por favor ingrese su usuario y contraseña para continuar ***" << endl;
+				}
 				else
+				{
 						cout << "*** Comando no valido ***" << endl;
+				}
 		}
 		return 0;
 }
@@ -137,10 +154,9 @@ bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
 {
 		for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
 		{
-				cout << "In validateSession cmdInput: " << cmdInput << " input: " << input << endl << "getNombre: " << (*it)->getNombre() << " getPass: " << (*it)->getPass() << endl;
+				cout << "Pass " << (*it)->getPass() << " input: " << input << endl;
 				if(((*it)->getNombre()==cmdInput) && ((*it)->getPass()==input))
 				{
-						cout << "in If" << endl;
 						return true;
 				}
 		}
