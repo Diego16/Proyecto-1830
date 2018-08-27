@@ -140,7 +140,7 @@ bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias)
 {
 		bool success = false;
 		string line;
-		Agencia* newAgency;
+		Agencia* newAgency = new Agencia();
 		ifstream myfile(nombreArchivo.c_str());
 		vector<string> tokenizedLine;
 		if (myfile.is_open())
@@ -165,7 +165,7 @@ bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas)
 {
 		bool success = false;
 		string line;
-		Ruta* newRoute;
+		Ruta* newRoute = new Ruta();
 		ifstream myfile(nombreArchivo.c_str());
 		vector<string> tokenizedLine;
 		if (myfile.is_open())
@@ -196,8 +196,8 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 {
 		bool success = false;
 		string line;
-		Venta* newSell;
-		Vuelo* aux;
+		Venta* newSell = new Venta();
+		Vuelo* aux = new Vuelo();
 		ifstream myfile(nombreArchivo.c_str());
 		vector<string> tokenizedLine;
 		if (myfile.is_open())
