@@ -16,7 +16,6 @@ private:
 		int disponibles;
 
 public:
-		Vuelo(Ruta* rutaIn,list<Venta*> vendidosIn,int fechaIn,int disponiblesIn);
 		void setRuta(Ruta* rutaIn);
 		void setVendidos(list<Venta*> vendidosIn);
 		void setFecha(int fechaIn);
@@ -27,5 +26,5 @@ public:
 		int getDisponibles();
 };
 
-// #include "vuelo.hxx"
+#include "vuelo.hxx"
 #endif
