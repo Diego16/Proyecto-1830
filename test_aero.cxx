@@ -317,7 +317,7 @@ bool Vender(string idRuta, int fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRuta
 				cin.sync();
 				cin.ignore();
 				getline(cin,nombre);
-				newSell->setCodigo(vendedora->getNombre() + to_string(vendedora->getCantVentas()));
+				newSell->setCodigo(vendedora->getNombre() + "_100" + to_string(vendedora->getCantVentas()));
 				newSell->setRuta(idRuta);
 				newSell->setIdcomprador(ID);
 				newSell->setNombre(nombre);
