@@ -33,8 +33,16 @@ int main(int argc, char* argv[])
 				return 1;
 		}
 		loadFlights(argv[1],tRutas);
+		for(list<Ruta*>::iterator it = tRutas.begin(); it!=tRutas.end(); it++)
+		{
+				cout << "Ruta " << (*it)->getCodigo() << endl;
+		}
 		loadSells(argv[2],tVuelos,tRutas,tVentas);
 		loadAgencies(argv[3],tAgencias);
+		for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
+		{
+				cout << "Agencia " << (*it)->getNombre() << " " << (*it)->getPass() << endl;
+		}
 		while(on)
 		{
 				cout << "$ ";
@@ -117,7 +125,7 @@ int main(int argc, char* argv[])
 				}
 				else if(strcmp(cmdList[0],"exit")==0)
 						on = false;
-				else if(!logged)
+				else if(!logged && strcmp(cmdList[0],"login")!=0)
 						cout << "*** Por favor ingrese su usuario y contraseña para continuar ***" << endl;
 				else
 						cout << "*** Comando no valido ***" << endl;
@@ -129,8 +137,10 @@ bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
 {
 		for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
 		{
-				if((*it)->getNombre()==cmdInput && (*it)->getPass()==input)
+				cout << "In validateSession cmdInput: " << cmdInput << " input: " << input << endl << "getNombre: " << (*it)->getNombre() << " getPass: " << (*it)->getPass() << endl;
+				if(((*it)->getNombre()==cmdInput) && ((*it)->getPass()==input))
 				{
+						cout << "in If" << endl;
 						return true;
 				}
 		}
@@ -140,15 +150,14 @@ bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias)
 {
 		bool success = false;
 		string line;
-		Agencia* newAgency = new Agencia();
 		ifstream myfile(nombreArchivo.c_str());
 		vector<string> tokenizedLine;
 		if (myfile.is_open())
 		{
-				getline (myfile,line);
 				int i = 0;
 				while((myfile.peek()!=EOF))
 				{
+						Agencia* newAgency = new Agencia();
 						getline (myfile,line);
 						tokenizedLine = tokenizer(line, ';');
 						newAgency->setNombre(tokenizedLine[1]);
@@ -165,15 +174,14 @@ bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas)
 {
 		bool success = false;
 		string line;
-		Ruta* newRoute = new Ruta();
 		ifstream myfile(nombreArchivo.c_str());
 		vector<string> tokenizedLine;
 		if (myfile.is_open())
 		{
-				getline (myfile,line);
 				int i = 0;
 				while((myfile.peek()!=EOF))
 				{
+						Ruta* newRoute = new Ruta();
 						getline (myfile,line);
 						tokenizedLine = tokenizer(line, ';');
 						newRoute->setCodigo(tokenizedLine[7]);
@@ -196,16 +204,15 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 {
 		bool success = false;
 		string line;
-		Venta* newSell = new Venta();
-		Vuelo* aux = new Vuelo();
 		ifstream myfile(nombreArchivo.c_str());
 		vector<string> tokenizedLine;
 		if (myfile.is_open())
 		{
-				getline (myfile,line);
 				int i = 0;
 				while((myfile.peek()!=EOF))
 				{
+						Venta* newSell = new Venta();
+						Vuelo* aux = new Vuelo();
 						getline (myfile,line);
 						tokenizedLine = tokenizer(line, ';');
 						newSell->setCodigo(tokenizedLine[6]);
@@ -217,9 +224,9 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 						newSell->setHrcompra(stoi(tokenizedLine[0]));
 						aux = checkVuelo(newSell->getFechavuelo(),findRuta(newSell->getRuta(),tRutas),tVuelos);
 						if(aux->getDisponibles()==-1)
-								cout << "La venta " << newSell->getCodigo() << "no fue registrada -> no hay sillas disponibles" << endl;
+								cout << "La venta " << newSell->getCodigo() << " no fue registrada -> no hay sillas disponibles" << endl;
 						else if(aux->getDisponibles()==-2)
-								cout << "La venta " << newSell->getCodigo() << "no fue registrada -> la ruta no existe" << endl;
+								cout << "La venta " << newSell->getCodigo() << " no fue registrada -> la ruta " << newSell->getRuta() << " no existe" << endl;
 						else
 						{
 								tVentas.push_back(newSell);
@@ -234,7 +241,7 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 }
 Vuelo* checkVuelo(int Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 {
-		Vuelo* aux;
+		Vuelo* aux = new Vuelo();
 		if(Lruta->getCodigo()=="0")
 		{
 				aux->setDisponibles(-2);
@@ -264,7 +271,7 @@ Vuelo* checkVuelo(int Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 }
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas)
 {
-		Ruta* aux;
+		Ruta* aux = new Ruta();
 		for(list<Ruta*>::iterator it = tRutas.begin(); it!=tRutas.end(); it++)
 		{
 				if((*it)->getCodigo()==Lcode)
@@ -288,9 +295,9 @@ Venta* Vender(vector <string> tokenizedLine, list<Vuelo*> &tVuelos, list<Ruta*> 
 		newSell->setHrcompra(stoi(tokenizedLine[0]));
 		aux = checkVuelo(newSell->getFechavuelo(),findRuta(newSell->getRuta(),tRutas),tVuelos);
 		if(aux->getDisponibles()==-1)
-				cout << "La venta " << newSell->getCodigo() << "no fue registrada -> no hay sillas disponibles" << endl;
+				cout << "La venta " << newSell->getCodigo() << " no fue registrada -> no hay sillas disponibles" << endl;
 		else if(aux->getDisponibles()==-2)
-				cout << "La venta " << newSell->getCodigo() << "no fue registrada -> la ruta no existe" << endl;
+				cout << "La venta " << newSell->getCodigo() << " no fue registrada -> la ruta no existe" << endl;
 		else
 				tVentas.push_back(newSell);
 		return newSell;
