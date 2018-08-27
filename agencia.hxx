@@ -18,6 +18,10 @@ void Agencia::setVentas(list<Venta*> ventasIn)
 {
 		ventasAg = ventasIn;
 }
+void Agencia::setCantventas(int cantVentasIn)
+{
+		cantVentas = cantVentasIn;
+}
 string Agencia::getNombre()
 {
 		return nombre;
@@ -29,5 +33,9 @@ string Agencia::getPass()
 list<Venta*>& Agencia::getVentas()
 {
 		return ventasAg;
+}
+int Agencia::getCantVentas()
+{
+		return cantVentas;
 }
 #endif

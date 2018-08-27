@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <ctime>
 #include <list>
 #include <vector>
 #include <fstream>
@@ -12,11 +13,12 @@ using namespace std;
 bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
-bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas);
+bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, list<Agencia*> &tAgencias);
 vector<string> tokenizer(string toTokenize, char token);
 Vuelo* checkVuelo(int Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas);
-Venta* Vender(vector <string> tokenizedLine, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas);
+Agencia* findAgencia(string Lname, list<Agencia*> &tAgencias);
+bool Vender(string idRuta, int fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
 //Función pricipal
 int main(int argc, char* argv[])
 {
@@ -24,6 +26,7 @@ int main(int argc, char* argv[])
 		list<Agencia*> tAgencias;
 		list<Venta*> tVentas;
 		list<Vuelo*> tVuelos;
+		Agencia* user = new Agencia();
 		bool on = true, logged = false;
 		string cmdInput = " ", input = " ", input1 = " ";
 		char command[300] = {' '};
@@ -33,8 +36,8 @@ int main(int argc, char* argv[])
 				return 1;
 		}
 		loadFlights(argv[1],tRutas);
-		loadSells(argv[2],tVuelos,tRutas,tVentas);
 		loadAgencies(argv[3],tAgencias);
+		loadSells(argv[2],tVuelos,tRutas,tVentas,tAgencias);
 		while(on)
 		{
 				cout << "$ ";
@@ -63,9 +66,14 @@ int main(int argc, char* argv[])
 								logged = validateSession(cmdInput,input,tAgencias);
 								if(!logged)
 										cout << "* Usuario o contraseña incorrectos, intente de nuevo *" << endl;
+								else
+								{
+										cout << ">>> Sesion iniciada para " << cmdInput << endl;
+										user = findAgencia(cmdInput,tAgencias);
+								}
 						}
 						else
-								cout << "Parametros invalidos" << endl;
+								cout << "** Parametros invalidos **" << endl;
 				}
 				else if(strcmp(cmdList[0],"report")==0 && logged)
 				{
@@ -92,19 +100,21 @@ int main(int argc, char* argv[])
 
 								}
 								else
-										cout << "Parametros invalidos" << endl;
+										cout << "** Parametros invalidos **" << endl;
 						}
 						else
-								cout << "Parametros invalidos" << endl;
+								cout << "** Parametros invalidos **" << endl;
 				}
 				else if(strcmp(cmdList[0],"sell")==0 && logged)
 				{
-						if (cantCmd==1)
+						if (cantCmd==3)
 						{
-
+								input = cmdList[1];
+								input1 = cmdList[2];
+								Vender(input,stoi(input1),tVuelos,tRutas,tVentas,user);
 						}
 						else
-								cout << "Parametros invalidos" << endl;
+								cout << "** Parametros invalidos **" << endl;
 				}
 				else if(strcmp(cmdList[0],"help")==0 && !logged)
 				{
@@ -178,6 +188,7 @@ bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias)
 						tokenizedLine = tokenizer(line, ';');
 						newAgency->setNombre(tokenizedLine[1]);
 						newAgency->setPass(tokenizedLine[0]);
+						newAgency->setCantventas(0);
 						tAgencias.push_back(newAgency);
 				}
 		}
@@ -216,13 +227,13 @@ bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas)
 		myfile.close();
 		return true;
 }
-bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas)
+bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, list<Agencia*> &tAgencias)
 {
 		bool success = false;
 		string line;
 		ifstream myfile(nombreArchivo.c_str());
 		vector<string> tokenizedLine;
-		int fallosExist = 0, fallosSeat = 0;
+		int fallosExist = 0, fallosSeat = 0, fallosAgency = 0;
 		if (myfile.is_open())
 		{
 				int i = 0;
@@ -230,6 +241,8 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 				{
 						Venta* newSell = new Venta();
 						Vuelo* aux = new Vuelo();
+						Agencia* Aaux = new Agencia();
+						int cant = 0;
 						getline (myfile,line);
 						tokenizedLine = tokenizer(line, ';');
 						newSell->setCodigo(tokenizedLine[6]);
@@ -244,8 +257,15 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 								fallosSeat++;
 						else if(aux->getDisponibles()==-2)
 								fallosExist++;
+						tokenizedLine[6].resize(tokenizedLine[6].size() - 5);
+						Aaux = findAgencia(tokenizedLine[6],tAgencias);
+						if(Aaux->getNombre()=="0")
+								fallosAgency++;
 						else
 						{
+								cant = Aaux->getCantVentas() + 1;
+								Aaux->setCantventas(cant);
+								Aaux->getVentas().push_back(newSell);
 								tVentas.push_back(newSell);
 								aux->getVendidos().push_back(newSell);
 						}
@@ -258,7 +278,59 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 				cerr << "No se registraron " << fallosSeat << " ventas, los vuelos no tenian sillas disponibles" << endl;
 		if(fallosExist>0)
 				cerr << "No se registraron " << fallosExist << " ventas, la ruta no existe" << endl;
+		if(fallosAgency>0)
+				cerr << "No se registraron " << fallosAgency << " ventas, la agencia no existe" << endl;
 		return true;
+}
+bool Vender(string idRuta, int fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
+{
+		Venta* newSell;
+		Vuelo* aux;
+		int fecha = 0, hora = 0;
+		string ID = " ", nombre = " ";
+		time_t t = std::time(0);
+		tm* now = std::localtime(&t);
+		aux = checkVuelo(fechaV,findRuta(idRuta,tRutas),tVuelos);
+		if(aux->getDisponibles()==-1)
+				cout << "La venta no fue registrada -> no hay sillas disponibles" << endl;
+		else if(aux->getDisponibles()==-2)
+				cout << "La venta no fue registrada -> la ruta no existe" << endl;
+		else
+		{
+				if(now->tm_mon + 1<10)
+						fecha += ((now->tm_year + 1900) * 10) + (now->tm_mon + 1);
+				else
+				{
+						fecha += (now->tm_year + 1900) + (now->tm_mon + 1);
+				}
+				if(now->tm_mday<10)
+						fecha = (fecha * 10) + now->tm_mday;
+				else
+				{
+						fecha += now->tm_mday;
+				}
+				hora = (now->tm_hour * 100) + now->tm_min;
+				cout << "Ingrese la identificacion del comprador: ";
+				cin >> ID;
+				cout << "Ingrese el nombre del comprador (apellidos, nombres): ";
+				cin.clear();
+				cin.sync();
+				cin.ignore();
+				getline(cin,nombre);
+				newSell->setCodigo(vendedora->getNombre() + to_string(vendedora->getCantVentas()));
+				newSell->setRuta(idRuta);
+				newSell->setIdcomprador(ID);
+				newSell->setNombre(nombre);
+				newSell->setFechavuelo(fechaV);
+				newSell->setFechacompra(fecha);
+				newSell->setHrcompra(hora);
+				vendedora->getVentas().push_back(newSell);
+				tVentas.push_back(newSell);
+				aux->getVendidos().push_back(newSell);
+				cout << "La venta fue registrada correctamente" << endl;
+				return true;
+		}
+		return false;
 }
 Vuelo* checkVuelo(int Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 {
@@ -302,28 +374,19 @@ Ruta* findRuta(string Lcode, list<Ruta*> &tRutas)
 		aux->setCodigo("0");
 		return aux;
 }
-/*
-   Venta* Vender(vector <string> tokenizedLine, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas)
-   {
-        Venta* newSell;
-        Vuelo* aux;
-        newSell->setCodigo(tokenizedLine[6]);
-        newSell->setRuta(tokenizedLine[5]);
-        newSell->setIdcomprador(tokenizedLine[4]);
-        newSell->setNombre(tokenizedLine[3]);
-        newSell->setFechavuelo(stoi(tokenizedLine[2]));
-        newSell->setFechacompra(stoi(tokenizedLine[1]));
-        newSell->setHrcompra(stoi(tokenizedLine[0]));
-        aux = checkVuelo(newSell->getFechavuelo(),findRuta(newSell->getRuta(),tRutas),tVuelos);
-        if(aux->getDisponibles()==-1)
-                cout << "La venta " << newSell->getCodigo() << " no fue registrada -> no hay sillas disponibles" << endl;
-        else if(aux->getDisponibles()==-2)
-                cout << "La venta " << newSell->getCodigo() << " no fue registrada -> la ruta no existe" << endl;
-        else
-                tVentas.push_back(newSell);
-        return newSell;
-   }
- */
+Agencia* findAgencia(string Lname, list<Agencia*> &tAgencias)
+{
+		Agencia* aux = new Agencia();
+		for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
+		{
+				if((*it)->getNombre()==Lname)
+				{
+						return *it;
+				}
+		}
+		aux->setNombre("0");
+		return aux;
+}
 vector<string> tokenizer(string toTokenize, char token)
 {
 		vector<string> tokenizedLine;
