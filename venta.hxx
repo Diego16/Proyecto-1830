@@ -20,17 +20,21 @@ void Venta::setNombre(string nombreIn)
 {
 		nombre = nombreIn;
 }
-void Venta::setFechavuelo(int fechavueloIn)
+void Venta::setFechavuelo(string fechavueloIn)
 {
 		fechavuelo = fechavueloIn;
 }
-void Venta::setFechacompra(int fechacompraIn)
+void Venta::setFechacompra(string fechacompraIn)
 {
 		fechacompra = fechacompraIn;
 }
-void Venta::setHrcompra(int hrcompraIn)
+void Venta::setHrcompra(string hrcompraIn)
 {
 		hrcompra = hrcompraIn;
+}
+void Venta::setEstado(string estadoIn)
+{
+		estado = estadoIn;
 }
 string Venta::getCodigo()
 {
@@ -48,17 +52,21 @@ string Venta::getNombre()
 {
 		return nombre;
 }
-int Venta::getFechavuelo()
+string Venta::getFechavuelo()
 {
 		return fechavuelo;
 }
-int Venta::getFechacompra()
+string Venta::getFechacompra()
 {
 		return fechacompra;
 }
-int Venta::getHrcompra()
+string Venta::getHrcompra()
 {
 		return hrcompra;
+}
+string Venta::getEstado()
+{
+		return estado;
 }
 
 #endif

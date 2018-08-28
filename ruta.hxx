@@ -19,7 +19,7 @@ void Ruta::setDestino(string destinoIn)
 {
 		destino = destinoIn;
 }
-void Ruta::setHrsalida(int hrsalidaIn)
+void Ruta::setHrsalida(string hrsalidaIn)
 {
 		hrsalida = hrsalidaIn;
 }
@@ -51,7 +51,7 @@ string Ruta::getDestino()
 {
 		return destino;
 }
-int Ruta::getHrsalida()
+string Ruta::getHrsalida()
 {
 		return hrsalida;
 }

@@ -12,7 +12,7 @@ void Vuelo::setVendidos(list<Venta*> vendidosIn)
 {
 		vendidos = vendidosIn;
 }
-void Vuelo::setFecha(int fechaIn)
+void Vuelo::setFecha(string fechaIn)
 {
 		fecha = fechaIn;
 }
@@ -28,7 +28,7 @@ list<Venta*> Vuelo::getVendidos()
 {
 		return vendidos;
 }
-int Vuelo::getFecha()
+string Vuelo::getFecha()
 {
 		return fecha;
 }

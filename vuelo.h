@@ -12,17 +12,17 @@ class Vuelo {
 private:
 		Ruta* ruta;
 		list<Venta*> vendidos;
-		int fecha;
+		string fecha;
 		int disponibles;
 
 public:
 		void setRuta(Ruta* rutaIn);
 		void setVendidos(list<Venta*> vendidosIn);
-		void setFecha(int fechaIn);
+		void setFecha(string fechaIn);
 		void setDisponibles(int disponiblesIn);
 		Ruta* getRuta();
 		list<Venta*> getVendidos();
-		int getFecha();
+		string getFecha();
 		int getDisponibles();
 };
 

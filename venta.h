@@ -12,25 +12,28 @@ private:
 		string ruta;
 		string idComprador;
 		string nombre;
-		int fechavuelo;
-		int fechacompra;
-		int hrcompra;
+		string fechavuelo;
+		string fechacompra;
+		string hrcompra;
+		string estado;
 
 public:
 		void setCodigo(string codigoIn);
 		void setRuta(string rutaIn);
 		void setIdcomprador(string idCompradorIn);
 		void setNombre(string nombreIn);
-		void setFechavuelo(int fechavueloIn);
-		void setFechacompra(int fechacompraIn);
-		void setHrcompra(int hrcompraIn);
+		void setFechavuelo(string fechavueloIn);
+		void setFechacompra(string fechacompraIn);
+		void setHrcompra(string hrcompraIn);
+		void setEstado(string estadoIn);
 		string getCodigo();
 		string getRuta();
 		string getIdComprador();
 		string getNombre();
-		int getFechavuelo();
-		int getFechacompra();
-		int getHrcompra();
+		string getFechavuelo();
+		string getFechacompra();
+		string getHrcompra();
+		string getEstado();
 };
 
 #include "venta.hxx"

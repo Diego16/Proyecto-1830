@@ -14,7 +14,7 @@ private:
 		string dia;
 		string origen;
 		string destino;
-		int hrsalida;
+		string hrsalida;
 		int duracion;
 		int sillas;
 		int costosilla;
@@ -24,7 +24,7 @@ public:
 		void setDia(string diaIn);
 		void setOrigen(string origenIn);
 		void setDestino(string destinoIn);
-		void setHrsalida(int horsalidaIn);
+		void setHrsalida(string horsalidaIn);
 		void setDuracion(int duracionIn);
 		void setSillas(int sillasIn);
 		void setCosto(int costosillaIn);
@@ -32,7 +32,7 @@ public:
 		string getDia();
 		string getOrigen();
 		string getDestino();
-		int getHrsalida();
+		string getHrsalida();
 		int getDuracion();
 		int getSillas();
 		int getCosto();
