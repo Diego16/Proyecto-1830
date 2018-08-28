@@ -15,10 +15,11 @@ bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
 bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, list<Agencia*> &tAgencias);
 vector<string> tokenizer(string toTokenize, char token);
-Vuelo* checkVuelo(int Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
+Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas);
 Agencia* findAgencia(string Lname, list<Agencia*> &tAgencias);
-bool Vender(string idRuta, int fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
+bool Vender(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
+void inventory(list<Venta*> &tVentas);
 //Función pricipal
 int main(int argc, char* argv[])
 {
@@ -97,7 +98,7 @@ int main(int argc, char* argv[])
 								}
 								else if(cmdInput=="inventory")
 								{
-
+										inventory(user->getVentas());
 								}
 								else
 										cout << "** Parametros invalidos **" << endl;
@@ -111,7 +112,7 @@ int main(int argc, char* argv[])
 						{
 								input = cmdList[1];
 								input1 = cmdList[2];
-								Vender(input,stoi(input1),tVuelos,tRutas,tVentas,user);
+								Vender(input,input1,tVuelos,tRutas,tVentas,user);
 						}
 						else
 								cout << "** Parametros invalidos **" << endl;
@@ -215,7 +216,7 @@ bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas)
 						newRoute->setDia(tokenizedLine[6]);
 						newRoute->setOrigen(tokenizedLine[5]);
 						newRoute->setDestino(tokenizedLine[4]);
-						newRoute->setHrsalida(stoi(tokenizedLine[3]));
+						newRoute->setHrsalida(tokenizedLine[3]);
 						newRoute->setDuracion(stoi(tokenizedLine[2]));
 						newRoute->setSillas(stoi(tokenizedLine[1]));
 						newRoute->setCosto(stoi(tokenizedLine[0]));
@@ -249,9 +250,10 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 						newSell->setRuta(tokenizedLine[5]);
 						newSell->setIdcomprador(tokenizedLine[4]);
 						newSell->setNombre(tokenizedLine[3]);
-						newSell->setFechavuelo(stoi(tokenizedLine[2]));
-						newSell->setFechacompra(stoi(tokenizedLine[1]));
-						newSell->setHrcompra(stoi(tokenizedLine[0]));
+						newSell->setFechavuelo(tokenizedLine[2]);
+						newSell->setFechacompra(tokenizedLine[1]);
+						newSell->setHrcompra(tokenizedLine[0]);
+						newSell->setEstado("VIGENTE");
 						aux = checkVuelo(newSell->getFechavuelo(),findRuta(newSell->getRuta(),tRutas),tVuelos);
 						if(aux->getDisponibles()==-1)
 								fallosSeat++;
@@ -282,11 +284,11 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 				cerr << "No se registraron " << fallosAgency << " ventas, la agencia no existe" << endl;
 		return true;
 }
-bool Vender(string idRuta, int fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
+bool Vender(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
 {
 		Venta* newSell = new Venta();
 		Vuelo* aux = new Vuelo();
-		int fecha = 0, hora = 0;
+		string fecha = " ", hora = " ";
 		string ID = " ", nombre = " ";
 		time_t t = std::time(0);
 		tm* now = std::localtime(&t);
@@ -297,19 +299,8 @@ bool Vender(string idRuta, int fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRuta
 				cout << "La venta no fue registrada -> la ruta no existe" << endl;
 		else
 		{
-				if(now->tm_mon + 1<10)
-						fecha += ((now->tm_year + 1900) * 10) + (now->tm_mon + 1);
-				else
-				{
-						fecha += (now->tm_year + 1900) + (now->tm_mon + 1);
-				}
-				if(now->tm_mday<10)
-						fecha = (fecha * 10) + now->tm_mday;
-				else
-				{
-						fecha += now->tm_mday;
-				}
-				hora = (now->tm_hour * 100) + now->tm_min;
+				fecha = to_string(now->tm_year + 1900) + to_string(now->tm_mon + 1) + to_string(now->tm_mday);
+				hora = to_string(now->tm_hour) + to_string(now->tm_min);
 				cout << "Ingrese la identificacion del comprador: ";
 				cin >> ID;
 				cout << "Ingrese el nombre del comprador (apellidos, nombres): ";
@@ -332,7 +323,33 @@ bool Vender(string idRuta, int fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRuta
 		}
 		return false;
 }
-Vuelo* checkVuelo(int Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
+void inventory(list<Venta*> &tVentas)
+{
+		int fecha1 = 0, fecha2 = 0;
+		for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
+				for(list<Venta*>::iterator itI = tVentas.begin(); itI!=tVentas.end(); itI++)
+				{
+						if((*it)->getCodigo()==(*itI)->getCodigo())
+						{
+								fecha1 = stoi((*it)->getFechacompra());
+								fecha2 = stoi((*itI)->getFechacompra());
+								if(fecha1<fecha2 && (*itI)->getEstado()!="CAMBIO")
+								{
+										(*it)->setEstado("CAMBIO");
+										(*itI)->setEstado("VIGENTE");
+										break;
+								}
+						}
+				}
+		cout << "CODIGO \t  RUTA \t ID_Comprador \t NOMBRE \t\t  FECHA VUELO   FECHA COMPRA   HORA COMPRA   ESTADO" << endl;
+		cout << "-----------------------------------------------------------------------------------------------------------------" << endl;
+		for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
+		{
+				cout << (*it)->getCodigo() << " " << (*it)->getRuta() << "  " << (*it)->getIdComprador() << "  " << (*it)->getNombre() << "  " << (*it)->getFechavuelo() << "   " << (*it)->getFechacompra() << "    " << (*it)->getHrcompra() << "    " << (*it)->getEstado() << endl;
+				cout << "-----------------------------------------------------------------------------------------------------------------" << endl;
+		}
+}
+Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 {
 		Vuelo* aux = new Vuelo();
 		if(Lruta->getCodigo()=="0")
