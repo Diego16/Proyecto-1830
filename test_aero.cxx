@@ -10,17 +10,17 @@
 #include "vuelo.h"
 using namespace std;
 //Funciones auxiliares
-bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
 bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, list<Agencia*> &tAgencias);
-vector<string> tokenizer(string toTokenize, char token);
-Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
-Ruta* findRuta(string Lcode, list<Ruta*> &tRutas);
-Agencia* findAgencia(string Lname, list<Agencia*> &tAgencias);
 bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
 void inventory(list<Venta*> &tVentas);
 void availability(string input,string input1,list<Vuelo*> &tVuelos);
+bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
+Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
+Ruta* findRuta(string Lcode, list<Ruta*> &tRutas);
+Agencia* findAgencia(string Lname, list<Agencia*> &tAgencias);
+vector<string> tokenizer(string toTokenize, char token);
 //Función pricipal
 int main(int argc, char* argv[])
 {
