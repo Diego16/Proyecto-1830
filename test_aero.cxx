@@ -18,8 +18,9 @@ vector<string> tokenizer(string toTokenize, char token);
 Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas);
 Agencia* findAgencia(string Lname, list<Agencia*> &tAgencias);
-bool Vender(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
+bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
 void inventory(list<Venta*> &tVentas);
+void availability(string input,string input1,list<Vuelo*> &tVuelos);
 //Función pricipal
 int main(int argc, char* argv[])
 {
@@ -84,7 +85,10 @@ int main(int argc, char* argv[])
 								if(cmdInput=="flights")
 								{
 										if(cantCmd==3)
+										{
 												input = cmdList[2];
+												input1 = "N";
+										}
 										else if(cantCmd==4)
 										{
 												input = cmdList[2];
@@ -95,6 +99,7 @@ int main(int argc, char* argv[])
 												input = "N";
 												input1 = "N";
 										}
+										availability(input,input1,tVuelos);
 								}
 								else if(cmdInput=="inventory")
 								{
@@ -112,7 +117,7 @@ int main(int argc, char* argv[])
 						{
 								input = cmdList[1];
 								input1 = cmdList[2];
-								Vender(input,input1,tVuelos,tRutas,tVentas,user);
+								selling(input,input1,tVuelos,tRutas,tVentas,user);
 						}
 						else
 								cout << "** Parametros invalidos **" << endl;
@@ -162,17 +167,6 @@ int main(int argc, char* argv[])
 		return 0;
 }
 
-bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
-{
-		for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
-		{
-				if(((*it)->getNombre()==cmdInput) && ((*it)->getPass()==input))
-				{
-						return true;
-				}
-		}
-		return false;
-}
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias)
 {
 		bool success = false;
@@ -284,7 +278,7 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 				cerr << "No se registraron " << fallosAgency << " ventas, la agencia no existe" << endl;
 		return true;
 }
-bool Vender(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
+bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
 {
 		Venta* newSell = new Venta();
 		Vuelo* aux = new Vuelo();
@@ -341,13 +335,88 @@ void inventory(list<Venta*> &tVentas)
 								}
 						}
 				}
-		cout << "CODIGO \t  RUTA \t ID_Comprador \t NOMBRE \t\t  FECHA VUELO   FECHA COMPRA   HORA COMPRA   ESTADO" << endl;
+		cout << "CODIGO       RUTA     ID_Comprador         NOMBRE           FECHA VUELO    FECHA COMPRA    HORA COMPRA    ESTADO" << endl;
 		cout << "-----------------------------------------------------------------------------------------------------------------" << endl;
 		for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
 		{
-				cout << (*it)->getCodigo() << " " << (*it)->getRuta() << "  " << (*it)->getIdComprador() << "  " << (*it)->getNombre() << "  " << (*it)->getFechavuelo() << "   " << (*it)->getFechacompra() << "    " << (*it)->getHrcompra() << "    " << (*it)->getEstado() << endl;
+				cout << (*it)->getCodigo() << "   " << (*it)->getRuta() << "    " << (*it)->getIdComprador() << "    " << (*it)->getNombre() << "    " << (*it)->getFechavuelo() << "   " << (*it)->getFechacompra() << "    " << (*it)->getHrcompra() << "    " << (*it)->getEstado() << endl;
 				cout << "-----------------------------------------------------------------------------------------------------------------" << endl;
 		}
+}
+void availability(string input,string input1,list<Vuelo*> &tVuelos)
+{
+		char aux = input[0];
+		cout << "RUTA     ORIGEN     DESTINO     FECHA     SILLAS    " << endl;
+		cout << "-----------------------------------------------------" << endl;
+		if(input=="N"&&input1=="N")
+		{
+				for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+				{
+						cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
+						cout << "-----------------------------------------------------" << endl;
+				}
+		}
+		else if(input1=="N")
+		{
+				if(aux=='2')
+				{
+						for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+						{
+								if(input==(*it)->getFecha())
+								{
+										cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
+										cout << "-----------------------------------------------------" << endl;
+								}
+						}
+				}
+				else
+				{
+						for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+						{
+								if(input==(*it)->getRuta()->getOrigen())
+								{
+										cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
+										cout << "-----------------------------------------------------" << endl;
+								}
+						}
+				}
+		}
+		else
+		{
+				if(aux=='2')
+				{
+						for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+						{
+								if(input==(*it)->getFecha()&&input1==(*it)->getRuta()->getOrigen())
+								{
+										cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
+										cout << "-----------------------------------------------------" << endl;
+								}
+						}
+				}
+				else
+				{
+						for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+						{
+								if(input==(*it)->getRuta()->getOrigen()&&input1==(*it)->getFecha())
+								{
+										cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
+										cout << "-----------------------------------------------------" << endl;
+								}
+						}
+				}
+		}
+}
+bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
+{
+		for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
+		{
+				if(((*it)->getNombre()==cmdInput) && ((*it)->getPass()==input))
+				{
+						return true;
+				}
+		}
+		return false;
 }
 Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 {
@@ -376,6 +445,7 @@ Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 		aux->setRuta(Lruta);
 		aux->setFecha(Lfecha);
 		aux->setDisponibles(Lruta->getSillas() - 1);
+		tVuelos.push_back(aux);
 		return aux;
 }
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas)
