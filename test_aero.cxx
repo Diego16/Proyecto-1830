@@ -292,7 +292,7 @@ bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &t
 		else if(aux->getDisponibles()==-2)
 				cout << "La venta no fue registrada -> la ruta no existe" << endl;
 		else
-		{
+		{   //TODO:Verificar iomanip setw setfill
 				fecha = to_string(now->tm_year + 1900) + to_string(now->tm_mon + 1) + to_string(now->tm_mday);
 				hora = to_string(now->tm_hour) + to_string(now->tm_min);
 				cout << "Ingrese la identificacion del comprador: ";
@@ -309,6 +309,7 @@ bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &t
 				newSell->setFechavuelo(fechaV);
 				newSell->setFechacompra(fecha);
 				newSell->setHrcompra(hora);
+				newSell->setEstado("VIGENTE");
 				vendedora->getVentas().push_back(newSell);
 				tVentas.push_back(newSell);
 				aux->getVendidos().push_back(newSell);
