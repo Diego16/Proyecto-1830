@@ -8,6 +8,7 @@
 #include "venta.h"
 #include "ruta.h"
 #include "vuelo.h"
+#include "bettyPrinter/bprinter/table_printer.h"
 using namespace std;
 //Funciones auxiliares
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
@@ -292,7 +293,7 @@ bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &t
 		else if(aux->getDisponibles()==-2)
 				cout << "La venta no fue registrada -> la ruta no existe" << endl;
 		else
-		{   //TODO:Verificar iomanip setw setfill
+		{   //TODO Implementar iomanip setw http://www.cplusplus.com/reference/iomanip/setw/
 				fecha = to_string(now->tm_year + 1900) + to_string(now->tm_mon + 1) + to_string(now->tm_mday);
 				hora = to_string(now->tm_hour) + to_string(now->tm_min);
 				cout << "Ingrese la identificacion del comprador: ";
