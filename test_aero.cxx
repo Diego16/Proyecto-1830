@@ -20,9 +20,11 @@ bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
 bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, list<Agencia*> &tAgencias);
 bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
+bool cancelSell(list<Venta*> &tVentas, string idVuelo);
 void inventory(list<Venta*> &tVentas);
 void availability(string input,string input1,list<Vuelo*> &tVuelos);
 bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
+void updateStates(list<Venta*> &tVentas);
 Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas);
 Agencia* findAgencia(string Lname, list<Agencia*> &tAgencias);
@@ -128,6 +130,19 @@ int main(int argc, char* argv[])
 			else
 				cout << "** Parametros invalidos **" << endl;
 		}
+		else if(strcmp(cmdList[0],"cancel")==0 && logged)
+		{
+			if (cantCmd==2)
+			{
+				input = cmdList[1];
+				if(cancelSell(user->getVentas(), input))
+					cout<<">>> La venta "<< input<< " fue cancelada exitosamente"<<endl;
+				else
+					cout<<"+++ La venta "<< input<< " no fue cancelada, verifique el codigo y vuelva a intentar"<<endl;
+			}
+			else
+				cout << "** Parametros invalidos **" << endl;
+		}
 		else if(strcmp(cmdList[0],"help")==0 && !logged)
 		{
 			if (cantCmd==1)
@@ -136,16 +151,18 @@ int main(int argc, char* argv[])
 			{
 				cmdInput = cmdList[1];
 				if(cmdInput=="login")
-					cout << "===login <id_agencia>" << endl << "==== Activa la sesión de la agencia seleccionada en la aplicación" << endl;
+					cout << "=== login <id_agencia>" << endl << "==== Activa la sesión de la agencia seleccionada en la aplicación" << endl;
 				if(cmdInput=="exit")
-					cout << "===exit" << endl << "==== Termina la ejecucion de la aplicacion." << endl;
+					cout << "=== exit" << endl << "==== Termina la ejecucion de la aplicacion." << endl;
 			}
+			else
+				cout << "** Parametros invalidos **" << endl;
 		}
 		else if(strcmp(cmdList[0],"help")==0 && logged)
 		{
 			if (cantCmd==1)
-				cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   sell" << endl << "   logout" << endl << "   exit" << endl;
-			else if (cantCmd>=2)
+				cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   sell" << endl << "   cancel" << endl << "   logout" << endl << "   exit" << endl;
+			else if (cantCmd==2)
 			{
 				cmdInput = cmdList[1];
 				input = cmdList[2];
@@ -155,11 +172,15 @@ int main(int argc, char* argv[])
 					cout << "=== report inventory" << endl << "==== Reporte de todos los vuelos vendidos, cambiados o cancelados por la agencia" << endl;
 				if(cmdInput=="sell")
 					cout << "=== sell <id_vuelo> <fecha>" << endl << "==== Permite la venta del vuelo seleccionado en la fecha especificada en caso de ser posible" << endl;
+				if(cmdInput=="cancel")
+					cout << "=== cancel <id_vuelo>" << endl << "==== Cancela la venta del vuelo seleccionado" << endl;
 				if(cmdInput=="logout")
 					cout << "=== logout" << endl << "==== Termina la sesión de la agencia logueada en la aplicación" << endl;
 				if(cmdInput=="exit")
 					cout << "=== exit" << endl << "==== Termina la ejecucion de la aplicacion." << endl;
 			}
+			else
+				cout << "** Parametros invalidos **" << endl;
 		}
 		else if(strcmp(cmdList[0],"exit")==0)
 			return 0;
@@ -324,24 +345,23 @@ bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &t
 	}
 	return false;
 }
+bool cancelSell(list<Venta*> &tVentas, string idVuelo)
+{
+	bool res=false;
+	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
+	{
+		if((*it)->getCodigo()==idVuelo)
+		{
+			(*it)->setEstado("CANCELADO");
+			res=true;
+		}
+	}
+	return res;
+}
 void inventory(list<Venta*> &tVentas)
 {
 	int fecha1 = 0, fecha2 = 0;
-	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
-		for(list<Venta*>::iterator itI = tVentas.begin(); itI!=tVentas.end(); itI++)
-		{
-			if((*it)->getCodigo()==(*itI)->getCodigo())
-			{
-				fecha1 = stoi((*it)->getFechacompra());
-				fecha2 = stoi((*itI)->getFechacompra());
-				if(fecha1<fecha2 && (*itI)->getEstado()!="CAMBIO")
-				{
-					(*it)->setEstado("CAMBIO");
-					(*itI)->setEstado("VIGENTE");
-					break;
-				}
-			}
-		}
+	updateStates(tVentas);
 	TablePrinter tp(&cout);
 	tp.AddColumn("CODIGO  ",10);
 	tp.AddColumn("RUTA ", 6);
@@ -433,6 +453,27 @@ bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
 		}
 	}
 	return false;
+}
+void updateStates(list<Venta*> &tVentas)
+{
+	int fecha1 = 0, fecha2 = 0;
+	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
+		for(list<Venta*>::iterator itI = tVentas.begin(); itI!=tVentas.end(); itI++)
+		{
+			if((*it)->getCodigo()==(*itI)->getCodigo())
+			{
+				if((*it)->getEstado()=="CANCELADO")
+					break;
+				fecha1 = stoi((*it)->getFechacompra());
+				fecha2 = stoi((*itI)->getFechacompra());
+				if(fecha1<fecha2 && (*itI)->getEstado()!="CAMBIO")
+				{
+					(*it)->setEstado("CAMBIO");
+					(*itI)->setEstado("VIGENTE");
+					break;
+				}
+			}
+		}
 }
 Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 {
