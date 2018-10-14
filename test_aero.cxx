@@ -20,8 +20,9 @@ bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
 bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, list<Agencia*> &tAgencias);
 bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
-bool cancelSell(list<Venta*> &tVentas, string idVuelo);
+bool cancelSell(list<Venta*> &tVentas, string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
 void inventory(list<Venta*> &tVentas);
+bool consolidate(list<Venta*> &tVentas);
 void availability(string input,string input1,list<Vuelo*> &tVuelos);
 bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
 void updateStates(list<Venta*> &tVentas);
@@ -37,7 +38,7 @@ int main(int argc, char* argv[])
 	list<Venta*> tVentas;
 	list<Vuelo*> tVuelos;
 	Agencia* user = new Agencia();
-	bool on = true, logged = false;
+	bool logged = false;
 	string cmdInput = " ", input = " ", input1 = " ";
 	char command[300] = {' '};
 	if(argc<4||argc>4)
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
 	loadFlights(argv[1],tRutas);
 	loadAgencies(argv[3],tAgencias);
 	loadSells(argv[2],tVuelos,tRutas,tVentas,tAgencias);
-	while(on)
+	while(true)
 	{
 		cout << "$ ";
 		cin.clear();
@@ -135,11 +136,18 @@ int main(int argc, char* argv[])
 			if (cantCmd==2)
 			{
 				input = cmdList[1];
-				if(cancelSell(user->getVentas(), input))
+				if(cancelSell(user->getVentas(), input,tRutas,tVuelos))
 					cout<<">>> La venta "<< input<< " fue cancelada exitosamente"<<endl;
 				else
 					cout<<"+++ La venta "<< input<< " no fue cancelada, verifique el codigo y vuelva a intentar"<<endl;
 			}
+			else
+				cout << "** Parametros invalidos **" << endl;
+		}
+		else if(strcmp(cmdList[0],"consolidate")==0 && logged)
+		{
+			if(cantCmd==1)
+				consolidate(user->getVentas());
 			else
 				cout << "** Parametros invalidos **" << endl;
 		}
@@ -161,7 +169,7 @@ int main(int argc, char* argv[])
 		else if(strcmp(cmdList[0],"help")==0 && logged)
 		{
 			if (cantCmd==1)
-				cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   sell" << endl << "   cancel" << endl << "   logout" << endl << "   exit" << endl;
+				cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   sell" << endl << "   cancel" << endl << "   consolidate" << endl << "   logout" << endl << "   exit" << endl;
 			else if (cantCmd==2)
 			{
 				cmdInput = cmdList[1];
@@ -174,6 +182,8 @@ int main(int argc, char* argv[])
 					cout << "=== sell <id_vuelo> <fecha>" << endl << "==== Permite la venta del vuelo seleccionado en la fecha especificada en caso de ser posible" << endl;
 				if(cmdInput=="cancel")
 					cout << "=== cancel <id_vuelo>" << endl << "==== Cancela la venta del vuelo seleccionado" << endl;
+				if(cmdInput=="consolidate")
+					cout << "=== consolidate" << endl << "==== Elimina las transacciones de vuelos realizados" << endl;
 				if(cmdInput=="logout")
 					cout << "=== logout" << endl << "==== Termina la sesión de la agencia logueada en la aplicación" << endl;
 				if(cmdInput=="exit")
@@ -276,13 +286,13 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 			newSell->setHrcompra(tokenizedLine[0]);
 			newSell->setEstado("VIGENTE");
 			aux = checkVuelo(newSell->getFechavuelo(),findRuta(newSell->getRuta(),tRutas),tVuelos);
+			tokenizedLine[6].resize(tokenizedLine[6].size() - 5);
+			Aaux = findAgencia(tokenizedLine[6],tAgencias);
 			if(aux->getDisponibles()==-1)
 				fallosSeat++;
 			else if(aux->getDisponibles()==-2)
 				fallosExist++;
-			tokenizedLine[6].resize(tokenizedLine[6].size() - 5);
-			Aaux = findAgencia(tokenizedLine[6],tAgencias);
-			if(Aaux->getNombre()=="0")
+			else if(Aaux->getNombre()=="0")
 				fallosAgency++;
 			else
 			{
@@ -291,6 +301,7 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 				Aaux->getVentas().push_back(newSell);
 				tVentas.push_back(newSell);
 				aux->getVendidos().push_back(newSell);
+				Aaux->getVuelos().push_back(aux);
 			}
 		}
 	}
@@ -298,18 +309,18 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 		return false;
 	myfile.close();
 	if(fallosSeat>0)
-		cerr << "No se registraron " << fallosSeat << " ventas, los vuelos no tenian sillas disponibles" << endl;
+		cerr << "+++ No se registraron " << fallosSeat << " ventas, los vuelos no tenian sillas disponibles" << endl;
 	if(fallosExist>0)
-		cerr << "No se registraron " << fallosExist << " ventas, la ruta no existe" << endl;
+		cerr << "+++ No se registraron " << fallosExist << " ventas, la ruta no existe" << endl;
 	if(fallosAgency>0)
-		cerr << "No se registraron " << fallosAgency << " ventas, la agencia no existe" << endl;
+		cerr << "+++ No se registraron " << fallosAgency << " ventas, la agencia no existe" << endl;
 	return true;
 }
 bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
 {
 	Venta* newSell = new Venta();
 	Vuelo* aux = new Vuelo();
-	char fecha[8], hora[4];
+	char fecha[10], hora[6];
 	string ID = " ", nombre = " ";
 	aux = checkVuelo(fechaV,findRuta(idRuta,tRutas),tVuelos);
 	if(aux->getDisponibles()==-1)
@@ -345,14 +356,15 @@ bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &t
 	}
 	return false;
 }
-bool cancelSell(list<Venta*> &tVentas, string idVuelo)
+bool cancelSell(list<Venta*> &tVentas, string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
 {
 	bool res=false;
 	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
 	{
-		if((*it)->getCodigo()==idVuelo)
+		if((*it)->getCodigo()==idVenta)
 		{
 			(*it)->setEstado("CANCELADO");
+			checkVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos)->getDisponibles()++;
 			res=true;
 		}
 	}
@@ -377,6 +389,23 @@ void inventory(list<Venta*> &tVentas)
 		tp << (*it)->getCodigo() << (*it)->getRuta() << (*it)->getIdComprador() << (*it)->getNombre() << (*it)->getFechavuelo() << (*it)->getFechacompra() << (*it)->getHrcompra() << (*it)->getEstado();
 	}
 	tp.PrintFooter();
+}
+bool consolidate(list<Venta*> &tVentas)
+{
+	char fecha[10];
+	string fec;
+	using chrono::system_clock;
+	time_t tt = system_clock::to_time_t (system_clock::now());
+	strftime(fecha,sizeof(fecha),"%Y%m%d", localtime(&tt));
+	fec=fecha;
+	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
+	{
+		if(stoi((*it)->getFechavuelo())<stoi(fec))
+		{
+			it=tVentas.erase(it);
+		}
+	}
+	inventory(tVentas);
 }
 void availability(string input,string input1,list<Vuelo*> &tVuelos)
 {
