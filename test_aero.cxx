@@ -1,15 +1,20 @@
 #include <iostream>
+#include <iomanip>
 #include <cstring>
 #include <ctime>
+#include <chrono>
+#include <locale>
 #include <list>
 #include <vector>
 #include <fstream>
+#include "table_printer.h" //Taken from https://github.com/dattanchu/bprinter under MIT License
 #include "agencia.h"
 #include "venta.h"
 #include "ruta.h"
 #include "vuelo.h"
-#include "bettyPrinter/bprinter/table_printer.h"
+
 using namespace std;
+using BPrinter::TablePrinter;
 //Funciones auxiliares
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
@@ -283,19 +288,19 @@ bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &t
 {
 		Venta* newSell = new Venta();
 		Vuelo* aux = new Vuelo();
-		string fecha = " ", hora = " ";
+		char fecha[8], hora[4];
 		string ID = " ", nombre = " ";
-		time_t t = std::time(0);
-		tm* now = std::localtime(&t);
 		aux = checkVuelo(fechaV,findRuta(idRuta,tRutas),tVuelos);
 		if(aux->getDisponibles()==-1)
 				cout << "La venta no fue registrada -> no hay sillas disponibles" << endl;
 		else if(aux->getDisponibles()==-2)
 				cout << "La venta no fue registrada -> la ruta no existe" << endl;
 		else
-		{   //TODO Implementar iomanip setw http://www.cplusplus.com/reference/iomanip/setw/
-				fecha = to_string(now->tm_year + 1900) + to_string(now->tm_mon + 1) + to_string(now->tm_mday);
-				hora = to_string(now->tm_hour) + to_string(now->tm_min);
+		{
+			using chrono::system_clock;
+			time_t tt = system_clock::to_time_t (system_clock::now());
+				strftime(fecha,sizeof(fecha),"%Y%m%d", localtime(&tt));
+				strftime(hora,sizeof(hora),"%H%M", localtime(&tt));
 				cout << "Ingrese la identificacion del comprador: ";
 				cin >> ID;
 				cout << "Ingrese el nombre del comprador (apellidos, nombres): ";
@@ -337,25 +342,37 @@ void inventory(list<Venta*> &tVentas)
 								}
 						}
 				}
-		cout << "CODIGO       RUTA     ID_Comprador         NOMBRE           FECHA VUELO    FECHA COMPRA    HORA COMPRA    ESTADO" << endl;
-		cout << "-----------------------------------------------------------------------------------------------------------------" << endl;
+				TablePrinter tp(&cout);
+				tp.AddColumn("CODIGO  ",10);
+				tp.AddColumn("RUTA ", 6);
+				tp.AddColumn("ID_Comprador  ", 16);
+				tp.AddColumn("NOMBRE              ", 35);
+				tp.AddColumn("FECHA VUELO ", 13);
+				tp.AddColumn("FECHA COMPRA ", 14);
+				tp.AddColumn("HORA COMPRA ", 13);
+				tp.AddColumn("ESTADO  ", 10);
+				tp.PrintHeader();
 		for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
 		{
-				cout << (*it)->getCodigo() << "   " << (*it)->getRuta() << "    " << (*it)->getIdComprador() << "    " << (*it)->getNombre() << "    " << (*it)->getFechavuelo() << "   " << (*it)->getFechacompra() << "    " << (*it)->getHrcompra() << "    " << (*it)->getEstado() << endl;
-				cout << "-----------------------------------------------------------------------------------------------------------------" << endl;
+				tp << (*it)->getCodigo() << (*it)->getRuta() << (*it)->getIdComprador() << (*it)->getNombre() << (*it)->getFechavuelo() << (*it)->getFechacompra() << (*it)->getHrcompra() << (*it)->getEstado();
 		}
+		tp.PrintFooter();
 }
 void availability(string input,string input1,list<Vuelo*> &tVuelos)
 {
 		char aux = input[0];
-		cout << "RUTA     ORIGEN     DESTINO     FECHA     SILLAS    " << endl;
-		cout << "-----------------------------------------------------" << endl;
+		TablePrinter tp(&cout);
+		tp.AddColumn("RUTA ", 6);
+		tp.AddColumn("ORIGEN     ",16);
+		tp.AddColumn("DESTINO    ",15);
+		tp.AddColumn("FECHA   ", 11);
+		tp.AddColumn("SILLAS",6);
+		tp.PrintHeader();
 		if(input=="N"&&input1=="N")
 		{
 				for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
 				{
-						cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
-						cout << "-----------------------------------------------------" << endl;
+						tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
 				}
 		}
 		else if(input1=="N")
@@ -366,8 +383,7 @@ void availability(string input,string input1,list<Vuelo*> &tVuelos)
 						{
 								if(input==(*it)->getFecha())
 								{
-										cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
-										cout << "-----------------------------------------------------" << endl;
+										tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
 								}
 						}
 				}
@@ -377,8 +393,7 @@ void availability(string input,string input1,list<Vuelo*> &tVuelos)
 						{
 								if(input==(*it)->getRuta()->getOrigen())
 								{
-										cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
-										cout << "-----------------------------------------------------" << endl;
+										tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
 								}
 						}
 				}
@@ -391,8 +406,7 @@ void availability(string input,string input1,list<Vuelo*> &tVuelos)
 						{
 								if(input==(*it)->getFecha()&&input1==(*it)->getRuta()->getOrigen())
 								{
-										cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
-										cout << "-----------------------------------------------------" << endl;
+										tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
 								}
 						}
 				}
@@ -402,12 +416,12 @@ void availability(string input,string input1,list<Vuelo*> &tVuelos)
 						{
 								if(input==(*it)->getRuta()->getOrigen()&&input1==(*it)->getFecha())
 								{
-										cout << (*it)->getRuta()->getCodigo() << "    " << (*it)->getRuta()->getOrigen() << "    " << (*it)->getRuta()->getDestino() << "    " << (*it)->getFecha() << "    " << (*it)->getDisponibles() << endl;
-										cout << "-----------------------------------------------------" << endl;
+										tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
 								}
 						}
 				}
 		}
+		tp.PrintFooter();
 }
 bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
 {
