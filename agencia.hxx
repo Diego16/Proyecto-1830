@@ -44,7 +44,7 @@ void Agencia::setCancelados(int canceladosIn)
 }
 void Agencia::setCambiados(int cambiadosIn)
 {
-	cancelados = canceladosIn
+	cambiados = cambiadosIn;
 }
 string Agencia::getNombre()
 {

@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	loadAgencies(argv[3],tAgencias);
 	loadSells(argv[2],tVuelos,tRutas,tVentas,tAgencias);
 	for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
-		updateStates(tRutas,tVuelos, it);
+		updateStates(tRutas,tVuelos, (*it));
 	while(true)
 	{
 		cout << "$ ";
@@ -379,15 +379,15 @@ bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agen
 {
 	Vuelo* auxV = new Vuelo();
 	bool res=false;
-	for(list<Venta*>::iterator it = vendedora.getVentas().begin(); it!=vendedora.getVentas().end(); it++)
+	for(list<Venta*>::iterator it = vendedora->getVentas().begin(); it!=vendedora->getVentas().end(); it++)
 	{
 		if((*it)->getCodigo()==idVenta)
 		{
 			if((*it)->getEstado()=="VIGENTE")
 			{
 				auxV=findVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos);
-				auxV->setDisponibles(auxIntauxV->getDisponibles()+1);
-				vendedora.setCancelados(vendedora.getCancelados()+1);
+				auxV->setDisponibles(auxV->getDisponibles()+1);
+				vendedora->setCancelados(vendedora->getCancelados()+1);
 			}
 			(*it)->setEstado("CANCELADO");
 			res=true;
@@ -511,8 +511,8 @@ void updateStates(list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedor
 {
 	int fecha1 = 0, fecha2 = 0;
 	Vuelo* auxV = new Vuelo();
-	for(list<Venta*>::iterator it = vendedora.getVentas().begin(); it!=vendedora.getVentas().end(); it++)
-		for(list<Venta*>::iterator itI = vendedora.getVentas().begin(); itI!=vendedora.getVentas().end(); itI++)
+	for(list<Venta*>::iterator it = vendedora->getVentas().begin(); it!=vendedora->getVentas().end(); it++)
+		for(list<Venta*>::iterator itI = vendedora->getVentas().begin(); itI!=vendedora->getVentas().end(); itI++)
 		{
 			if((*it)->getCodigo()==(*itI)->getCodigo())
 			{
@@ -534,12 +534,12 @@ void updateStates(list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedor
 					if(diff<0)
 					{
 						(*itI)->setValor((*itI)->getValor()+diff);
-						vendedora.setDevoluciones(vendedora.getDevoluciones()+diff);
+						vendedora->setDevoluciones(vendedora->getDevoluciones()+diff);
 					}
 					else
 					{
 						(*itI)->setValor((*itI)->getValor()+diff);
-						vendedora.setIngresos(vendedora.getIngresos()+diff);
+						vendedora->setIngresos(vendedora->getIngresos()+diff);
 					}
 					break;
 				}

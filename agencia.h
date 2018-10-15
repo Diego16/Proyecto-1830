@@ -16,7 +16,7 @@ string pass;
 int cantVentas;
 int ingresos;
 int devoluciones;
-int ganacias;
+int ganancias;
 int cancelados;
 int cambiados;
 list<Venta*> ventasAg;
