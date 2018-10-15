@@ -15,16 +15,19 @@
 
 using namespace std;
 using BPrinter::TablePrinter;
-//Funciones auxiliares
+//Funciones componente 1
+bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
 bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, list<Agencia*> &tAgencias);
 bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
-bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora);
 void inventory(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
-bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
+//Funciones componente 2
 void availability(string input,string input1,list<Vuelo*> &tVuelos);
-bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
+bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
+bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora);
+void finances(Agencia* &vendedora);
+//Funciones auxiliares
 void updateStates(list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora);
 Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Vuelo* findVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
@@ -119,7 +122,7 @@ int main(int argc, char* argv[])
 				}
 				else if(cmdInput=="money")
 				{
-
+					finances(user);
 				}
 				else
 					cout << "** Parametros invalidos **" << endl;
@@ -177,7 +180,7 @@ int main(int argc, char* argv[])
 		{
 			if (cantCmd==1)
 				cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   report money" << endl << "   sell" << endl << "   cancel" << endl << "   consolidate" << endl << "   logout" << endl << "   exit" << endl;
-			else if (cantCmd==2)
+			else if (cantCmd>=2)
 			{
 				cmdInput = cmdList[1];
 				input = cmdList[2];
@@ -388,6 +391,7 @@ bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agen
 				auxV=findVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos);
 				auxV->setDisponibles(auxV->getDisponibles()+1);
 				vendedora->setCancelados(vendedora->getCancelados()+1);
+				vendedora->setDevoluciones(vendedora->getDevoluciones()-((*it)->getValor()*0.85));
 			}
 			(*it)->setEstado("CANCELADO");
 			res=true;
@@ -495,6 +499,29 @@ void availability(string input,string input1,list<Vuelo*> &tVuelos)
 		}
 	}
 	tp.PrintFooter();
+}
+void finances(Agencia* &vendedora)
+{
+	TablePrinter tp1(&cout);
+	tp1.AddColumn("INGRESOS",20);
+	tp1.AddColumn("DEVOLUCIONES",20);
+	tp1.AddColumn("GANANCIAS",20);
+	tp1.AddColumn("CANCELACIONES",20);
+	tp1.AddColumn("CAMBIOS",20);
+	tp1.PrintHeader();
+	tp1 << vendedora->getIngresos() << vendedora->getDevoluciones() << vendedora->getIngresos() + vendedora->getDevoluciones() << vendedora->getCancelados() << vendedora->getCambiados();
+	tp1.PrintFooter();
+	TablePrinter tp2(&cout);
+	tp2.AddColumn("CODIGO  ",10);
+	tp2.AddColumn("RUTA ", 6);
+	tp2.AddColumn("VALOR  ", 10);
+	tp2.AddColumn("ESTADO  ", 10);
+	tp2.PrintHeader();
+	for(list<Venta*>::iterator it = vendedora->getVentas().begin(); it!=vendedora->getVentas().end(); it++)
+	{
+		tp2 << (*it)->getCodigo() << (*it)->getRuta() << (*it)->getValor() << (*it)->getEstado();
+	}
+	tp2.PrintFooter();
 }
 bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
 {
