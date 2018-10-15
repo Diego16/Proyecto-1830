@@ -21,11 +21,11 @@ bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
 bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, list<Agencia*> &tAgencias);
 bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
 bool cancelSell(list<Venta*> &tVentas, string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
-void inventory(list<Venta*> &tVentas);
-bool consolidate(list<Venta*> &tVentas);
+void inventory(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
+bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
 void availability(string input,string input1,list<Vuelo*> &tVuelos);
 bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
-void updateStates(list<Venta*> &tVentas);
+void updateStates(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
 Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas);
 Agencia* findAgencia(string Lname, list<Agencia*> &tAgencias);
@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
 				}
 				else if(cmdInput=="inventory")
 				{
-					inventory(user->getVentas());
+					inventory(user->getVentas(),tRutas,tVuelos);
 				}
 				else
 					cout << "** Parametros invalidos **" << endl;
@@ -147,7 +147,7 @@ int main(int argc, char* argv[])
 		else if(strcmp(cmdList[0],"consolidate")==0 && logged)
 		{
 			if(cantCmd==1)
-				consolidate(user->getVentas());
+				consolidate(user->getVentas(),tRutas,tVuelos);
 			else
 				cout << "** Parametros invalidos **" << endl;
 		}
@@ -358,22 +358,26 @@ bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &t
 }
 bool cancelSell(list<Venta*> &tVentas, string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
 {
+	int auxInt=0;
+	Vuelo* auxV = new Vuelo();
 	bool res=false;
 	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
 	{
 		if((*it)->getCodigo()==idVenta)
 		{
 			(*it)->setEstado("CANCELADO");
-			checkVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos)->getDisponibles()++;
+			auxV=checkVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos);
+			auxInt=auxV->getDisponibles()+1;
+			auxV->setDisponibles(auxInt);
 			res=true;
 		}
 	}
 	return res;
 }
-void inventory(list<Venta*> &tVentas)
+void inventory(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
 {
 	int fecha1 = 0, fecha2 = 0;
-	updateStates(tVentas);
+	updateStates(tVentas,tRutas,tVuelos);
 	TablePrinter tp(&cout);
 	tp.AddColumn("CODIGO  ",10);
 	tp.AddColumn("RUTA ", 6);
@@ -390,7 +394,7 @@ void inventory(list<Venta*> &tVentas)
 	}
 	tp.PrintFooter();
 }
-bool consolidate(list<Venta*> &tVentas)
+bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
 {
 	char fecha[10];
 	string fec;
@@ -405,7 +409,7 @@ bool consolidate(list<Venta*> &tVentas)
 			it=tVentas.erase(it);
 		}
 	}
-	inventory(tVentas);
+	inventory(tVentas,tRutas,tVuelos);
 }
 void availability(string input,string input1,list<Vuelo*> &tVuelos)
 {
@@ -483,9 +487,10 @@ bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
 	}
 	return false;
 }
-void updateStates(list<Venta*> &tVentas)
+void updateStates(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
 {
-	int fecha1 = 0, fecha2 = 0;
+	int fecha1 = 0, fecha2 = 0, auxInt=0;
+	Vuelo* auxV = new Vuelo();
 	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
 		for(list<Venta*>::iterator itI = tVentas.begin(); itI!=tVentas.end(); itI++)
 		{
@@ -499,6 +504,12 @@ void updateStates(list<Venta*> &tVentas)
 				{
 					(*it)->setEstado("CAMBIO");
 					(*itI)->setEstado("VIGENTE");
+					auxV=checkVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos);
+					auxInt=auxV->getDisponibles()+1;
+					auxV->setDisponibles(auxInt);
+					auxV=checkVuelo((*itI)->getFechavuelo(),findRuta((*itI)->getRuta(),tRutas),tVuelos);
+					auxInt=auxV->getDisponibles()-1;
+					auxV->setDisponibles(auxInt);
 					break;
 				}
 			}
