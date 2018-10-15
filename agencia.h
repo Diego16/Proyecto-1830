@@ -11,25 +11,38 @@ using namespace std;
 class Agencia {
 
 private:
-		string nombre;
-		string pass;
-		int cantVentas;
-		int devoluciones;
-		int ganancias;
-		list<Venta*> ventasAg;
-		list<Vuelo*> vuelosAg;
+string nombre;
+string pass;
+int cantVentas;
+int ingresos;
+int devoluciones;
+int ganacias;
+int cancelados;
+int cambiados;
+list<Venta*> ventasAg;
+list<Vuelo*> vuelosAg;
 
 public:
-		void setNombre(string nombreIn);
-		void setPass(string passIn);
-		void setVentas(list<Venta*> ventasIn);
-		void setVuelos(list<Vuelo*> vuelosIn);
-		void setCantventas(int cantVentasIn);
-		string getNombre();
-		string getPass();
-		list<Venta*>& getVentas();
-		list<Vuelo*>& getVuelos();
-		int getCantVentas();
+void setNombre(string nombreIn);
+void setPass(string passIn);
+void setVentas(list<Venta*> ventasIn);
+void setVuelos(list<Vuelo*> vuelosIn);
+void setCantventas(int cantVentasIn);
+void setIngresos(int ingresosIn);
+void setDevoluciones(int devolucionesIn);
+void setGanancias(int gananciasIn);
+void setCancelados(int canceladosIn);
+void setCambiados(int cambiadosIn);
+string getNombre();
+string getPass();
+list<Venta*>& getVentas();
+list<Vuelo*>& getVuelos();
+int getCantVentas();
+int getIngresos();
+int getDevoluciones();
+int getGanancias();
+int getCancelados();
+int getCambiados();
 };
 
 #include "agencia.hxx"
