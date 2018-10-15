@@ -25,7 +25,7 @@ void inventory(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos
 bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
 void availability(string input,string input1,list<Vuelo*> &tVuelos);
 bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
-void updateStates(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
+void updateStates(list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora);
 Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Vuelo* findVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas);
@@ -50,6 +50,8 @@ int main(int argc, char* argv[])
 	loadFlights(argv[1],tRutas);
 	loadAgencies(argv[3],tAgencias);
 	loadSells(argv[2],tVuelos,tRutas,tVentas,tAgencias);
+	for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
+		updateStates(tRutas,tVuelos, it);
 	while(true)
 	{
 		cout << "$ ";
@@ -115,6 +117,10 @@ int main(int argc, char* argv[])
 				{
 					inventory(user->getVentas(),tRutas,tVuelos);
 				}
+				else if(cmdInput=="money")
+				{
+
+				}
 				else
 					cout << "** Parametros invalidos **" << endl;
 			}
@@ -170,7 +176,7 @@ int main(int argc, char* argv[])
 		else if(strcmp(cmdList[0],"help")==0 && logged)
 		{
 			if (cantCmd==1)
-				cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   sell" << endl << "   cancel" << endl << "   consolidate" << endl << "   logout" << endl << "   exit" << endl;
+				cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   report money" << endl << "   sell" << endl << "   cancel" << endl << "   consolidate" << endl << "   logout" << endl << "   exit" << endl;
 			else if (cantCmd==2)
 			{
 				cmdInput = cmdList[1];
@@ -179,6 +185,8 @@ int main(int argc, char* argv[])
 					cout << "=== report flights [origen] [fecha]" << endl << "==== Reporte de vuelos con sillas disponibles. Se puede filtrar por ciudad de origen o fecha del vuelo" << endl;
 				if(cmdInput=="report"&&input=="inventory")
 					cout << "=== report inventory" << endl << "==== Reporte de todos los vuelos vendidos, cambiados o cancelados por la agencia" << endl;
+				if(cmdInput=="report"&&input=="money")
+					cout << "=== report money" << endl << "==== Reporte del estado financiero de la agencia" << endl;
 				if(cmdInput=="sell")
 					cout << "=== sell <id_vuelo> <fecha>" << endl << "==== Permite la venta del vuelo seleccionado en la fecha especificada en caso de ser posible" << endl;
 				if(cmdInput=="cancel")
@@ -289,6 +297,7 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 			newSell->setFechavuelo(tokenizedLine[2]);
 			newSell->setFechacompra(tokenizedLine[1]);
 			newSell->setHrcompra(tokenizedLine[0]);
+			newSell->setValor(findRuta(newSell->getRuta(),tRutas)->getCosto());
 			newSell->setEstado("VIGENTE");
 			aux = checkVuelo(newSell->getFechavuelo(),findRuta(newSell->getRuta(),tRutas),tVuelos);
 			tokenizedLine[6].resize(tokenizedLine[6].size() - 5);
@@ -319,7 +328,6 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 		cerr << "+++ No se registraron " << fallosExist << " ventas, la ruta no existe" << endl;
 	if(fallosAgency>0)
 		cerr << "+++ No se registraron " << fallosAgency << " ventas, la agencia no existe" << endl;
-	updateStates(tVentas,tRutas,tVuelos);
 	return true;
 }
 bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
@@ -355,9 +363,11 @@ bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &t
 		newSell->setFechacompra(fecha);
 		newSell->setHrcompra(hora);
 		newSell->setEstado("VIGENTE");
+		newSell->setValor(findRuta(idRuta,tRutas)->getCosto());
 		vendedora->getVentas().push_back(newSell);
 		cant = vendedora->getCantVentas() + 1;
 		vendedora->setCantventas(cant);
+		vendedora->setIngresos(vendedora->getIngresos()+newSell->getValor());
 		tVentas.push_back(newSell);
 		aux->getVendidos().push_back(newSell);
 		cout << "La venta fue registrada correctamente" << endl;
@@ -375,12 +385,9 @@ bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agen
 		{
 			if((*it)->getEstado()=="VIGENTE")
 			{
-				int auxInt=0;
 				auxV=findVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos);
-				auxInt=auxV->getDisponibles();
-				auxInt++;
-				auxV->setDisponibles(auxInt);
-				vendedora.set
+				auxV->setDisponibles(auxIntauxV->getDisponibles()+1);
+				vendedora.setCancelados(vendedora.getCancelados()+1);
 			}
 			(*it)->setEstado("CANCELADO");
 			res=true;
@@ -500,32 +507,40 @@ bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
 	}
 	return false;
 }
-void updateStates(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
+void updateStates(list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora)
 {
 	int fecha1 = 0, fecha2 = 0;
 	Vuelo* auxV = new Vuelo();
-	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
-		for(list<Venta*>::iterator itI = tVentas.begin(); itI!=tVentas.end(); itI++)
+	for(list<Venta*>::iterator it = vendedora.getVentas().begin(); it!=vendedora.getVentas().end(); it++)
+		for(list<Venta*>::iterator itI = vendedora.getVentas().begin(); itI!=vendedora.getVentas().end(); itI++)
 		{
 			if((*it)->getCodigo()==(*itI)->getCodigo())
 			{
-				int auxInt=0;
 				if((*it)->getEstado()=="CANCELADO")
 					break;
 				fecha1 = stoi((*it)->getFechacompra());
 				fecha2 = stoi((*itI)->getFechacompra());
 				if(fecha1<fecha2 && (*itI)->getEstado()!="CAMBIO")
 				{
+					int diff=0;
 					(*it)->setEstado("CAMBIO");
 					(*itI)->setEstado("VIGENTE");
 					auxV=findVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos);
-					auxInt=auxV->getDisponibles();
-					auxInt++;
-					auxV->setDisponibles(auxInt);
-					auxV=checkVuelo((*itI)->getFechavuelo(),findRuta((*itI)->getRuta(),tRutas),tVuelos);
-					auxInt=auxV->getDisponibles();
-					auxInt--;
-					auxV->setDisponibles(auxInt);
+					auxV->setDisponibles(auxV->getDisponibles()+1);
+					auxV=findVuelo((*itI)->getFechavuelo(),findRuta((*itI)->getRuta(),tRutas),tVuelos);
+					auxV->setDisponibles(auxV->getDisponibles()-1);
+					vendedora->setCambiados(vendedora->getCambiados()+1);
+					diff=(*it)->getValor()-(*itI)->getValor();
+					if(diff<0)
+					{
+						(*itI)->setValor((*itI)->getValor()+diff);
+						vendedora.setDevoluciones(vendedora.getDevoluciones()+diff);
+					}
+					else
+					{
+						(*itI)->setValor((*itI)->getValor()+diff);
+						vendedora.setIngresos(vendedora.getIngresos()+diff);
+					}
 					break;
 				}
 			}
