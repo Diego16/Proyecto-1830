@@ -5,66 +5,66 @@
 using namespace std;
 void Ruta::setCodigo(string codigoIn)
 {
-		codigo = codigoIn;
+	codigo = codigoIn;
 }
 void Ruta::setDia(string diaIn)
 {
-		dia = diaIn;
+	dia = diaIn;
 }
 void Ruta::setOrigen(string origenIn)
 {
-		origen = origenIn;
+	origen = origenIn;
 }
 void Ruta::setDestino(string destinoIn)
 {
-		destino = destinoIn;
+	destino = destinoIn;
 }
 void Ruta::setHrsalida(string hrsalidaIn)
 {
-		hrsalida = hrsalidaIn;
+	hrsalida = hrsalidaIn;
 }
 void Ruta::setDuracion(int duracionIn)
 {
-		duracion = duracionIn;
+	duracion = duracionIn;
 }
 void Ruta::setSillas(int sillasIn)
 {
-		sillas = sillasIn;
+	sillas = sillasIn;
 }
 void Ruta::setCosto(int costosillaIn)
 {
-		costosilla = costosillaIn;
+	costosilla = costosillaIn;
 }
 string Ruta::getCodigo()
 {
-		return codigo;
+	return codigo;
 }
 string Ruta::getDia()
 {
-		return dia;
+	return dia;
 }
 string Ruta::getOrigen()
 {
-		return origen;
+	return origen;
 }
 string Ruta::getDestino()
 {
-		return destino;
+	return destino;
 }
 string Ruta::getHrsalida()
 {
-		return hrsalida;
+	return hrsalida;
 }
 int Ruta::getDuracion()
 {
-		return duracion;
+	return duracion;
 }
 int Ruta::getSillas()
 {
-		return sillas;
+	return sillas;
 }
 int Ruta::getCosto()
 {
-		return costosilla;
+	return costosilla;
 }
 #endif

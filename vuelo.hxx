@@ -6,35 +6,35 @@ using namespace std;
 
 void Vuelo::setRuta(Ruta* rutaIn)
 {
-		ruta = rutaIn;
+	ruta = rutaIn;
 }
 void Vuelo::setVendidos(list<Venta*> vendidosIn)
 {
-		vendidos = vendidosIn;
+	vendidos = vendidosIn;
 }
 void Vuelo::setFecha(string fechaIn)
 {
-		fecha = fechaIn;
+	fecha = fechaIn;
 }
 void Vuelo::setDisponibles(int disponiblesIn)
 {
-		disponibles = disponiblesIn;
+	disponibles = disponiblesIn;
 }
 Ruta* Vuelo::getRuta()
 {
-		return ruta;
+	return ruta;
 }
 list<Venta*> Vuelo::getVendidos()
 {
-		return vendidos;
+	return vendidos;
 }
 string Vuelo::getFecha()
 {
-		return fecha;
+	return fecha;
 }
 int Vuelo::getDisponibles()
 {
-		return disponibles;
+	return disponibles;
 }
 
 #endif
