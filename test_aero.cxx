@@ -7,6 +7,10 @@
 #include <list>
 #include <vector>
 #include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <readline/history.h> //For tab-comletion Installation: sudo apt-get install libreadline-dev
+#include <readline/readline.h> //For tab-completion Installation: sudo apt-get install libreadline-dev
 #include "table_printer.h" //Taken from https://github.com/dattanchu/bprinter under MIT License
 #include "agencia.h"
 #include "venta.h"
@@ -15,25 +19,31 @@
 
 using namespace std;
 using BPrinter::TablePrinter;
+
+// Vocabulary for tab-completion
+std::vector<std::string> vocabulary{"report", "inventory", "login", "money", "help", "flights", "sell", "cancel", "consolidate", "logout", "exit"};
 //Funciones componente 1
 bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
+bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
+void inventory(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
+void availability(string input,string input1,list<Vuelo*> &tVuelos);
+//Funciones componente 2
+bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora);
+bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
+void finances(Agencia* &vendedora);
+//Funciones auxiliares
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
 bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, list<Agencia*> &tAgencias);
-bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
-void inventory(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
-//Funciones componente 2
-void availability(string input,string input1,list<Vuelo*> &tVuelos);
-bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
-bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora);
-void finances(Agencia* &vendedora);
-//Funciones auxiliares
 void updateStates(list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora);
 Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Vuelo* findVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos);
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas);
 Agencia* findAgencia(string Lname, list<Agencia*> &tAgencias);
 vector<string> tokenizer(string toTokenize, char token);
+//Funciones tab-completion taken from https://github.com/eliben/code-for-blog/blob/master/2016/readline-samples/readline-complete-simple.cpp under public domain usage
+char* completion_generator(const char* text, int state);
+char** completer(const char* text, int start, int end);
 //Función pricipal
 int main(int argc, char* argv[])
 {
@@ -44,7 +54,9 @@ int main(int argc, char* argv[])
 	Agencia* user = new Agencia();
 	bool logged = false;
 	string cmdInput = " ", input = " ", input1 = " ";
-	char command[300] = {' '};
+	char* buff;
+	char command[300]={' '};
+	rl_attempted_completion_function = completer;
 	if(argc<4||argc>4)
 	{
 		cerr << "Uso: " << argv[0] << " flightsX.txt " << " ticketsX.txt " << " passwordsX.txt " << endl;
@@ -55,21 +67,22 @@ int main(int argc, char* argv[])
 	loadSells(argv[2],tVuelos,tRutas,tVentas,tAgencias);
 	for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
 		updateStates(tRutas,tVuelos, (*it));
-	while(true)
+	while ((buff = readline("$ ")) != nullptr)
 	{
-		cout << "$ ";
-		cin.clear();
-		cin.sync();
-		cin.getline(command,300);
-		char* piece;
-		char* cmdList[10];
+		if (strlen(buff) > 0) {
+			add_history(buff);
+			strcpy(command,buff);
+		}
+		free(buff);
 		int cantCmd = 0;
-		piece = strtok (command," ");
+		char* cmdList[10];
+		char* piece;
+		piece = strtok(command, " ");
 		while (piece != NULL)
 		{
 			cmdList[cantCmd] = piece;
 			cantCmd++;
-			piece = strtok (NULL, " ");
+			piece = strtok(NULL, " ");
 		}
 		if (strcmp(cmdList[0],"login")==0 && !logged)
 		{
@@ -215,6 +228,207 @@ int main(int argc, char* argv[])
 	}
 	return 0;
 }
+bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
+{
+	for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
+	{
+		if(((*it)->getNombre()==cmdInput) && ((*it)->getPass()==input))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
+{
+	Venta* newSell = new Venta();
+	Vuelo* aux = new Vuelo();
+	char fecha[10], hora[6];
+	int cant=0;
+	string ID = " ", nombre = " ";
+	aux = checkVuelo(fechaV,findRuta(idRuta,tRutas),tVuelos);
+	if(aux->getDisponibles()==-1)
+		cout << "La venta no fue registrada -> no hay sillas disponibles" << endl;
+	else if(aux->getDisponibles()==-2)
+		cout << "La venta no fue registrada -> la ruta no existe" << endl;
+	else
+	{
+		using chrono::system_clock;
+		time_t tt = system_clock::to_time_t (system_clock::now());
+		strftime(fecha,sizeof(fecha),"%Y%m%d", localtime(&tt));
+		strftime(hora,sizeof(hora),"%H%M", localtime(&tt));
+		cout << "Ingrese la identificacion del comprador: ";
+		cin >> ID;
+		cout << "Ingrese el nombre del comprador (apellidos, nombres): ";
+		cin.clear();
+		cin.sync();
+		cin.ignore();
+		getline(cin,nombre);
+		newSell->setCodigo(vendedora->getNombre() + "_100" + to_string(vendedora->getCantVentas()));
+		newSell->setRuta(idRuta);
+		newSell->setIdcomprador(ID);
+		newSell->setNombre(nombre);
+		newSell->setFechavuelo(fechaV);
+		newSell->setFechacompra(fecha);
+		newSell->setHrcompra(hora);
+		newSell->setEstado("VIGENTE");
+		newSell->setValor(findRuta(idRuta,tRutas)->getCosto());
+		vendedora->getVentas().push_back(newSell);
+		cant = vendedora->getCantVentas() + 1;
+		vendedora->setCantventas(cant);
+		vendedora->setIngresos(vendedora->getIngresos()+newSell->getValor());
+		tVentas.push_back(newSell);
+		aux->getVendidos().push_back(newSell);
+		cout << "La venta fue registrada correctamente" << endl;
+		return true;
+	}
+	return false;
+}
+void inventory(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
+{
+	int fecha1 = 0, fecha2 = 0;
+	TablePrinter tp(&cout);
+	tp.AddColumn("CODIGO  ",10);
+	tp.AddColumn("RUTA ", 6);
+	tp.AddColumn("ID_Comprador  ", 16);
+	tp.AddColumn("NOMBRE              ", 35);
+	tp.AddColumn("FECHA VUELO ", 13);
+	tp.AddColumn("FECHA COMPRA ", 14);
+	tp.AddColumn("HORA COMPRA ", 13);
+	tp.AddColumn("ESTADO  ", 10);
+	tp.PrintHeader();
+	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
+	{
+		tp << (*it)->getCodigo() << (*it)->getRuta() << (*it)->getIdComprador() << (*it)->getNombre() << (*it)->getFechavuelo() << (*it)->getFechacompra() << (*it)->getHrcompra() << (*it)->getEstado();
+	}
+	tp.PrintFooter();
+}
+void availability(string input,string input1,list<Vuelo*> &tVuelos)
+{
+	char aux = input[0];
+	TablePrinter tp(&cout);
+	tp.AddColumn("RUTA ", 6);
+	tp.AddColumn("ORIGEN     ",16);
+	tp.AddColumn("DESTINO    ",15);
+	tp.AddColumn("FECHA   ", 11);
+	tp.AddColumn("SILLAS",6);
+	tp.PrintHeader();
+	if(input=="N"&&input1=="N")
+	{
+		for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+		{
+			tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
+		}
+	}
+	else if(input1=="N")
+	{
+		if(aux=='2')
+		{
+			for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+			{
+				if(input==(*it)->getFecha())
+				{
+					tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
+				}
+			}
+		}
+		else
+		{
+			for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+			{
+				if(input==(*it)->getRuta()->getOrigen())
+				{
+					tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
+				}
+			}
+		}
+	}
+	else
+	{
+		if(aux=='2')
+		{
+			for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+			{
+				if(input==(*it)->getFecha()&&input1==(*it)->getRuta()->getOrigen())
+				{
+					tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
+				}
+			}
+		}
+		else
+		{
+			for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
+			{
+				if(input==(*it)->getRuta()->getOrigen()&&input1==(*it)->getFecha())
+				{
+					tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
+				}
+			}
+		}
+	}
+	tp.PrintFooter();
+}
+bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora)
+{
+	Vuelo* auxV = new Vuelo();
+	bool res=false;
+	for(list<Venta*>::iterator it = vendedora->getVentas().begin(); it!=vendedora->getVentas().end(); it++)
+	{
+		if((*it)->getCodigo()==idVenta)
+		{
+			if((*it)->getEstado()=="VIGENTE")
+			{
+				auxV=findVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos);
+				auxV->setDisponibles(auxV->getDisponibles()+1);
+				vendedora->setCancelados(vendedora->getCancelados()+1);
+				vendedora->setDevoluciones(vendedora->getDevoluciones()-((*it)->getValor()*0.85));
+			}
+			(*it)->setEstado("CANCELADO");
+			res=true;
+		}
+	}
+	return res;
+}
+bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
+{
+	char fecha[10];
+	string fec;
+	using chrono::system_clock;
+	time_t tt = system_clock::to_time_t (system_clock::now());
+	strftime(fecha,sizeof(fecha),"%Y%m%d", localtime(&tt));
+	fec=fecha;
+	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
+	{
+		if(stoi((*it)->getFechavuelo())<stoi(fec))
+		{
+			it=tVentas.erase(it);
+		}
+	}
+	inventory(tVentas,tRutas,tVuelos);
+}
+void finances(Agencia* &vendedora)
+{
+	TablePrinter tp1(&cout);
+	tp1.AddColumn("INGRESOS",20);
+	tp1.AddColumn("DEVOLUCIONES",20);
+	tp1.AddColumn("GANANCIAS",20);
+	tp1.AddColumn("CANCELACIONES",20);
+	tp1.AddColumn("CAMBIOS",20);
+	tp1.PrintHeader();
+	tp1 << vendedora->getIngresos() << vendedora->getDevoluciones() << vendedora->getIngresos() + vendedora->getDevoluciones() << vendedora->getCancelados() << vendedora->getCambiados();
+	tp1.PrintFooter();
+	TablePrinter tp2(&cout);
+	tp2.AddColumn("CODIGO  ",10);
+	tp2.AddColumn("RUTA ", 6);
+	tp2.AddColumn("VALOR  ", 10);
+	tp2.AddColumn("ESTADO  ", 10);
+	tp2.PrintHeader();
+	for(list<Venta*>::iterator it = vendedora->getVentas().begin(); it!=vendedora->getVentas().end(); it++)
+	{
+		tp2 << (*it)->getCodigo() << (*it)->getRuta() << (*it)->getValor() << (*it)->getEstado();
+	}
+	tp2.PrintFooter();
+}
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias)
 {
 	bool success = false;
@@ -332,207 +546,6 @@ bool loadSells(string nombreArchivo, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas,
 	if(fallosAgency>0)
 		cerr << "+++ No se registraron " << fallosAgency << " ventas, la agencia no existe" << endl;
 	return true;
-}
-bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora)
-{
-	Venta* newSell = new Venta();
-	Vuelo* aux = new Vuelo();
-	char fecha[10], hora[6];
-	int cant=0;
-	string ID = " ", nombre = " ";
-	aux = checkVuelo(fechaV,findRuta(idRuta,tRutas),tVuelos);
-	if(aux->getDisponibles()==-1)
-		cout << "La venta no fue registrada -> no hay sillas disponibles" << endl;
-	else if(aux->getDisponibles()==-2)
-		cout << "La venta no fue registrada -> la ruta no existe" << endl;
-	else
-	{
-		using chrono::system_clock;
-		time_t tt = system_clock::to_time_t (system_clock::now());
-		strftime(fecha,sizeof(fecha),"%Y%m%d", localtime(&tt));
-		strftime(hora,sizeof(hora),"%H%M", localtime(&tt));
-		cout << "Ingrese la identificacion del comprador: ";
-		cin >> ID;
-		cout << "Ingrese el nombre del comprador (apellidos, nombres): ";
-		cin.clear();
-		cin.sync();
-		cin.ignore();
-		getline(cin,nombre);
-		newSell->setCodigo(vendedora->getNombre() + "_100" + to_string(vendedora->getCantVentas()));
-		newSell->setRuta(idRuta);
-		newSell->setIdcomprador(ID);
-		newSell->setNombre(nombre);
-		newSell->setFechavuelo(fechaV);
-		newSell->setFechacompra(fecha);
-		newSell->setHrcompra(hora);
-		newSell->setEstado("VIGENTE");
-		newSell->setValor(findRuta(idRuta,tRutas)->getCosto());
-		vendedora->getVentas().push_back(newSell);
-		cant = vendedora->getCantVentas() + 1;
-		vendedora->setCantventas(cant);
-		vendedora->setIngresos(vendedora->getIngresos()+newSell->getValor());
-		tVentas.push_back(newSell);
-		aux->getVendidos().push_back(newSell);
-		cout << "La venta fue registrada correctamente" << endl;
-		return true;
-	}
-	return false;
-}
-bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora)
-{
-	Vuelo* auxV = new Vuelo();
-	bool res=false;
-	for(list<Venta*>::iterator it = vendedora->getVentas().begin(); it!=vendedora->getVentas().end(); it++)
-	{
-		if((*it)->getCodigo()==idVenta)
-		{
-			if((*it)->getEstado()=="VIGENTE")
-			{
-				auxV=findVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos);
-				auxV->setDisponibles(auxV->getDisponibles()+1);
-				vendedora->setCancelados(vendedora->getCancelados()+1);
-				vendedora->setDevoluciones(vendedora->getDevoluciones()-((*it)->getValor()*0.85));
-			}
-			(*it)->setEstado("CANCELADO");
-			res=true;
-		}
-	}
-	return res;
-}
-void inventory(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
-{
-	int fecha1 = 0, fecha2 = 0;
-	TablePrinter tp(&cout);
-	tp.AddColumn("CODIGO  ",10);
-	tp.AddColumn("RUTA ", 6);
-	tp.AddColumn("ID_Comprador  ", 16);
-	tp.AddColumn("NOMBRE              ", 35);
-	tp.AddColumn("FECHA VUELO ", 13);
-	tp.AddColumn("FECHA COMPRA ", 14);
-	tp.AddColumn("HORA COMPRA ", 13);
-	tp.AddColumn("ESTADO  ", 10);
-	tp.PrintHeader();
-	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
-	{
-		tp << (*it)->getCodigo() << (*it)->getRuta() << (*it)->getIdComprador() << (*it)->getNombre() << (*it)->getFechavuelo() << (*it)->getFechacompra() << (*it)->getHrcompra() << (*it)->getEstado();
-	}
-	tp.PrintFooter();
-}
-bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
-{
-	char fecha[10];
-	string fec;
-	using chrono::system_clock;
-	time_t tt = system_clock::to_time_t (system_clock::now());
-	strftime(fecha,sizeof(fecha),"%Y%m%d", localtime(&tt));
-	fec=fecha;
-	for(list<Venta*>::iterator it = tVentas.begin(); it!=tVentas.end(); it++)
-	{
-		if(stoi((*it)->getFechavuelo())<stoi(fec))
-		{
-			it=tVentas.erase(it);
-		}
-	}
-	inventory(tVentas,tRutas,tVuelos);
-}
-void availability(string input,string input1,list<Vuelo*> &tVuelos)
-{
-	char aux = input[0];
-	TablePrinter tp(&cout);
-	tp.AddColumn("RUTA ", 6);
-	tp.AddColumn("ORIGEN     ",16);
-	tp.AddColumn("DESTINO    ",15);
-	tp.AddColumn("FECHA   ", 11);
-	tp.AddColumn("SILLAS",6);
-	tp.PrintHeader();
-	if(input=="N"&&input1=="N")
-	{
-		for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
-		{
-			tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
-		}
-	}
-	else if(input1=="N")
-	{
-		if(aux=='2')
-		{
-			for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
-			{
-				if(input==(*it)->getFecha())
-				{
-					tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
-				}
-			}
-		}
-		else
-		{
-			for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
-			{
-				if(input==(*it)->getRuta()->getOrigen())
-				{
-					tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
-				}
-			}
-		}
-	}
-	else
-	{
-		if(aux=='2')
-		{
-			for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
-			{
-				if(input==(*it)->getFecha()&&input1==(*it)->getRuta()->getOrigen())
-				{
-					tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
-				}
-			}
-		}
-		else
-		{
-			for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
-			{
-				if(input==(*it)->getRuta()->getOrigen()&&input1==(*it)->getFecha())
-				{
-					tp << (*it)->getRuta()->getCodigo() << (*it)->getRuta()->getOrigen() << (*it)->getRuta()->getDestino() << (*it)->getFecha() << (*it)->getDisponibles();
-				}
-			}
-		}
-	}
-	tp.PrintFooter();
-}
-void finances(Agencia* &vendedora)
-{
-	TablePrinter tp1(&cout);
-	tp1.AddColumn("INGRESOS",20);
-	tp1.AddColumn("DEVOLUCIONES",20);
-	tp1.AddColumn("GANANCIAS",20);
-	tp1.AddColumn("CANCELACIONES",20);
-	tp1.AddColumn("CAMBIOS",20);
-	tp1.PrintHeader();
-	tp1 << vendedora->getIngresos() << vendedora->getDevoluciones() << vendedora->getIngresos() + vendedora->getDevoluciones() << vendedora->getCancelados() << vendedora->getCambiados();
-	tp1.PrintFooter();
-	TablePrinter tp2(&cout);
-	tp2.AddColumn("CODIGO  ",10);
-	tp2.AddColumn("RUTA ", 6);
-	tp2.AddColumn("VALOR  ", 10);
-	tp2.AddColumn("ESTADO  ", 10);
-	tp2.PrintHeader();
-	for(list<Venta*>::iterator it = vendedora->getVentas().begin(); it!=vendedora->getVentas().end(); it++)
-	{
-		tp2 << (*it)->getCodigo() << (*it)->getRuta() << (*it)->getValor() << (*it)->getEstado();
-	}
-	tp2.PrintFooter();
-}
-bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias)
-{
-	for(list<Agencia*>::iterator it = tAgencias.begin(); it!=tAgencias.end(); it++)
-	{
-		if(((*it)->getNombre()==cmdInput) && ((*it)->getPass()==input))
-		{
-			return true;
-		}
-	}
-	return false;
 }
 void updateStates(list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora)
 {
@@ -658,4 +671,45 @@ vector<string> tokenizer(string toTokenize, char token)
 	aux.resize(aux.size() - 2);
 	tokenizedLine.insert(tokenizedLine.begin(), aux );
 	return tokenizedLine;
+}
+char* completion_generator(const char* text, int state)
+{
+	// This function is called with state=0 the first time; subsequent calls are
+	// with a nonzero state. state=0 can be used to perform one-time
+	// initialization for this completion session.
+	static std::vector<std::string> matches;
+	static size_t match_index = 0;
+
+	if (state == 0) {
+		// During initialization, compute the actual matches for 'text' and keep
+		// them in a static vector.
+		matches.clear();
+		match_index = 0;
+
+		// Collect a vector of matches: vocabulary words that begin with text.
+		std::string textstr = std::string(text);
+		for (auto word : vocabulary) {
+			if (word.size() >= textstr.size() &&
+			    word.compare(0, textstr.size(), textstr) == 0) {
+				matches.push_back(word);
+			}
+		}
+	}
+
+	if (match_index >= matches.size()) {
+		// We return nullptr to notify the caller no more matches are available.
+		return nullptr;
+	} else {
+		// Return a malloc'd char* for the match. The caller frees it.
+		return strdup(matches[match_index++].c_str());
+	}
+}
+char** completer(const char* text, int start, int end)
+{
+	// Don't do filename completion even if our generator finds no matches.
+	rl_attempted_completion_over = 1;
+
+	// Note: returning nullptr here will make readline use the default filename
+	// completer.
+	return rl_completion_matches(text, completion_generator);
 }
