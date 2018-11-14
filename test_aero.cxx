@@ -21,7 +21,7 @@ using namespace std;
 using BPrinter::TablePrinter;
 
 // Vocabulary for tab-completion
-std::vector<std::string> vocabulary{"report", "inventory", "login", "money", "help", "flights", "sell", "cancel", "consolidate", "logout", "exit"};
+vector<string> vocabulary{"report", "inventory", "login", "money", "help", "flights", "sell", "cancel", "consolidate", "logout", "exit", "path", "change"};
 //Funciones componente 1
 bool validateSession(string cmdInput, string input, list<Agencia*> &tAgencias);
 bool selling(string idRuta, string fechaV, list<Vuelo*> &tVuelos, list<Ruta*> &tRutas, list<Venta*> &tVentas, Agencia* &vendedora);
@@ -174,6 +174,24 @@ int main(int argc, char* argv[])
 			else
 				cout << "** Parametros invalidos **" << endl;
 		}
+		else if(strcmp(cmdList[0],"path")==0 && logged)
+		{
+			if(cantCmd==3)
+			{
+
+			}
+			else
+				cout << "** Parametros invalidos **" << endl;
+		}
+		else if(strcmp(cmdList[0],"change")==0 && logged)
+		{
+			if(cantCmd==4)
+			{
+
+			}
+			else
+				cout << "** Parametros invalidos **" << endl;
+		}
 		else if(strcmp(cmdList[0],"help")==0 && !logged)
 		{
 			if (cantCmd==1)
@@ -192,7 +210,7 @@ int main(int argc, char* argv[])
 		else if(strcmp(cmdList[0],"help")==0 && logged)
 		{
 			if (cantCmd==1)
-				cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   report money" << endl << "   sell" << endl << "   cancel" << endl << "   consolidate" << endl << "   logout" << endl << "   exit" << endl;
+				cout << endl << "Comandos disponibles: " << endl << "   report flights" << endl << "   report inventory" << endl << "   report money" << endl << "   sell" << endl << "   cancel" << endl << "   consolidate" << endl << "   path" << endl << "   change" << endl << "   help" << endl << "   logout" << endl << "   exit" << endl;
 			else if (cantCmd>=2)
 			{
 				cmdInput = cmdList[1];
@@ -209,6 +227,10 @@ int main(int argc, char* argv[])
 					cout << "=== cancel <id_vuelo>" << endl << "==== Cancela la venta del vuelo seleccionado" << endl;
 				if(cmdInput=="consolidate")
 					cout << "=== consolidate" << endl << "==== Elimina las transacciones de vuelos realizados" << endl;
+				if(cmdInput=="change")
+					cout << "=== change <id_pasajero> <id_vuelo_original> <id_vuevo_vuelo>" << endl << "==== Se cambia el vuelo de un pasajero acorde al paquete" << endl;
+				if(cmdInput=="path")
+					cout << "=== path <origen> <destino>" << endl << "==== Calcula maximo tres rutas entre dos ciudades" << endl;
 				if(cmdInput=="logout")
 					cout << "=== logout" << endl << "==== Termina la sesión de la agencia logueada en la aplicación" << endl;
 				if(cmdInput=="exit")
