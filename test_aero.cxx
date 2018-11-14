@@ -20,6 +20,8 @@
 using namespace std;
 using BPrinter::TablePrinter;
 
+//Excecution: g++ -std=c++11 test_aero.cxx -o exe -l readline
+
 // Vocabulary for tab-completion
 vector<string> vocabulary{"report", "inventory", "login", "money", "help", "flights", "sell", "cancel", "consolidate", "logout", "exit", "path", "change"};
 //Funciones componente 1
@@ -29,7 +31,7 @@ void inventory(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos
 void availability(string input,string input1,list<Vuelo*> &tVuelos);
 //Funciones componente 2
 bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora);
-bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
+void consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
 void finances(Agencia* &vendedora);
 //Funciones auxiliares
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
@@ -411,7 +413,7 @@ bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agen
 	}
 	return res;
 }
-bool consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
+void consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos)
 {
 	char fecha[10];
 	string fec;
@@ -640,6 +642,7 @@ Vuelo* checkVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 }
 Vuelo* findVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 {
+	Vuelo* aux = new Vuelo();
 	for(list<Vuelo*>::iterator it = tVuelos.begin(); it!=tVuelos.end(); it++)
 	{
 		if((*it)->getRuta()==Lruta&&(*it)->getFecha()==Lfecha)
@@ -647,6 +650,8 @@ Vuelo* findVuelo(string Lfecha, Ruta* Lruta, list<Vuelo*> &tVuelos)
 			return *it;
 		}
 	}
+	aux->setDisponibles(0);
+	return aux;
 }
 Ruta* findRuta(string Lcode, list<Ruta*> &tRutas)
 {
