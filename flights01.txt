@@ -1,16 +1,16 @@
 LN400;viernes;El Cairo;Londres;0204;0054;109;456000
-LN401;lunes;seul;Salvador;0600;0023;133;157000
-LN402;miercoles;Yakarta;perth;1629;0603;255;152000
-LN403;viernes;Praga;Hong kong;1951;1635;293;424000
+LN401;lunes;Seul;Salvador;0600;0023;133;157000
+LN402;miercoles;Yakarta;Perth;1629;0603;255;152000
+LN403;viernes;Praga;Hong Kong;1951;1635;293;424000
 UW400;jueves;Calcuta;Manila;1711;1312;453;509000
 UW401;martes;Caracas;Amsterdam;1440;1557;132;509000
-UW402;martes;seul;Sacramento;2121;0741;437;391000
+UW402;martes;Seul;Sacramento;2121;0741;437;391000
 UW403;jueves;Taipei;Praga;1751;1539;467;121000
 AU400;viernes;Guadalajara;Rio de Janeiro;2051;0733;253;601000
 AU401;lunes;Hiroshima;Fukuoka;1516;2045;342;172000
 AU402;lunes;Tokio;Budapest;0417;1312;426;567000
 AU403;jueves;Almaty;Esmima;1004;0853;449;393000
-XQ400;jueves;seul;Durban;1528;2045;330;532000
+XQ400;jueves;Seul;Durban;1528;2045;330;532000
 XQ401;miercoles;Esmima;Pretoria;0619;0743;478;676000
-XQ402;jueves;Chicago;los Angeles;0901;1738;424;449000
+XQ402;jueves;Chicago;Los Angeles;0901;1738;424;449000
 XQ403;martes;Oslo;Nagoya;1815;0224;132;243000
