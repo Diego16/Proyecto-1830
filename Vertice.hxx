@@ -19,42 +19,42 @@ void Vertex<T>::addAdjacents(unsigned long cost,  Vertex<T>* vert){
 	Edge* aux  = new Edge(cost,false);
 	this->adjacents.insert(std::pair<Vertex<T>*, Edge* >(vert,aux) );
 }
-//=========================================================================
-template < class T >
-bool operator == (const Vertex<T> &v1, const Vertex<T> &v2){
-	return v1.data == v2.data;
-}
-//=========================================================================
-template < class T >
-bool operator != (const Vertex<T> &v1, const Vertex<T> &v2){
-	return v1.data != v2.data;
-}
-//=========================================================================
-template < class T >
-bool operator < (const Vertex<T> &v1, const Vertex<T> &v2){
-	return v1.data < v2.data;
-}
-//=========================================================================
-template < class T >
-bool operator > (const Vertex<T> &v1, const Vertex<T> &v2){
-	return v1.data > v2.data;
-}
-//=========================================================================
-template < class T >
-bool operator >= (const Vertex<T> &v1, const Vertex<T>&v2){
-	return v1.data >= v2.data;
-}
-//=========================================================================
-template < class T >
-bool operator <= (const Vertex<T> &v1, const Vertex<T> &v2){
-	return v1.data <= v2.data;
-}
-//=========================================================================
-template < class T >
-std::ostream& operator << (std::ostream &o, const Vertex<T> &v1){
-	return o << v1.data;
-}
-//=========================================================================
+/*//=========================================================================
+   template < class T >
+   bool operator == (const Vertex<T> &v1, const Vertex<T> &v2){
+        return v1.data == v2.data;
+   }
+   //=========================================================================
+   template < class T >
+   bool operator != (const Vertex<T> &v1, const Vertex<T> &v2){
+        return v1.data != v2.data;
+   }
+   //=========================================================================
+   template < class T >
+   bool operator < (const Vertex<T> &v1, const Vertex<T> &v2){
+        return v1.data < v2.data;
+   }
+   //=========================================================================
+   template < class T >
+   bool operator > (const Vertex<T> &v1, const Vertex<T> &v2){
+        return v1.data > v2.data;
+   }
+   //=========================================================================
+   template < class T >
+   bool operator >= (const Vertex<T> &v1, const Vertex<T>&v2){
+        return v1.data >= v2.data;
+   }
+   //=========================================================================
+   template < class T >
+   bool operator <= (const Vertex<T> &v1, const Vertex<T> &v2){
+        return v1.data <= v2.data;
+   }
+   //=========================================================================
+   template < class T >
+   std::ostream& operator << (std::ostream &o, const Vertex<T> &v1){
+        return o << v1.data;
+   }
+ *///=========================================================================
 template < class T >
 void Vertex<T>::eraseEdge(Vertex<T>*vert){
 	typename std::multimap<Vertex<T>*, Edge* >::iterator it;

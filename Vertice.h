@@ -39,14 +39,16 @@ void setVisited(bool v);
 unsigned int getGrade();
 bool exist(Vertex<T>* v );
 std::multimap<Vertex<T>*, Edge* > GetAdjacents();
-template<T> friend bool operator == (const Vertex<T> &v1, const Vertex<T> &v2);
-template<T> friend bool operator != (const Vertex<T> &v1, const Vertex<T> &v2);
-template<T> friend bool operator < (const Vertex<T> &v1, const Vertex<T> &v2);
-template<T> friend bool operator > (const Vertex<T> &v1, const Vertex<T> &v2);
-template<T> friend bool operator >= (const Vertex<T> &v1, const Vertex<T> &v2);
-template<T> friend bool operator <= (const Vertex<T> &v1, const Vertex<T> &v2);
-template<T> friend bool operator != (const Vertex<T> &v1, const Vertex<T> &v2);
-template<T> friend std ::ostream& operator << (std::ostream &o, const Vertex<T> &v1);
+/*
+   template<T> friend bool operator == (const Vertex<T> &v1, const Vertex<T> &v2);
+   template<T> friend bool operator != (const Vertex<T> &v1, const Vertex<T> &v2);
+   template<T> friend bool operator < (const Vertex<T> &v1, const Vertex<T> &v2);
+   template<T> friend bool operator > (const Vertex<T> &v1, const Vertex<T> &v2);
+   template<T> friend bool operator >= (const Vertex<T> &v1, const Vertex<T> &v2);
+   template<T> friend bool operator <= (const Vertex<T> &v1, const Vertex<T> &v2);
+   template<T> friend bool operator != (const Vertex<T> &v1, const Vertex<T> &v2);
+   template<T> friend std ::ostream& operator << (std::ostream &o, const Vertex<T> &v1);
+ */
 void resetVisited();
 void rmEdge(Vertex<T>* v);
 void reAddEdge(Vertex<T>* v);
