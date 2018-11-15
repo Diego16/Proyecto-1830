@@ -67,4 +67,8 @@ int Ruta::getCosto()
 {
 	return costosilla;
 }
+ostream& operator << (ostream &o, const Ruta* rt)
+{
+	return o <<rt->codigo<<":"<<rt->origen<<"-"<< rt->destino;
+}
 #endif

@@ -9,7 +9,7 @@ using namespace std;
 
 class Ruta {
 
-private:
+protected:
 string codigo;
 string dia;
 string origen;
@@ -36,7 +36,7 @@ string getHrsalida();
 int getDuracion();
 int getSillas();
 int getCosto();
-
+friend ostream& operator << (ostream &o, const Ruta* rt);
 };
 
 #include "ruta.hxx"
