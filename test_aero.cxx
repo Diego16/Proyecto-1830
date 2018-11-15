@@ -515,29 +515,45 @@ bool changeSell(string idCliente, string idVueloO, string idVueloN, list<Ruta*> 
 					}
 
 				}
-				auxVn->setCodigo((*it)->getCodigo());
-				auxVn->setRuta(idVueloN);
-				auxVn->setIdcomprador((*it)->getIdComprador());
-				auxVn->setNombre((*it)->getNombre());
-				auxVn->setFechavuelo(auxV->getFecha());
-				auxVn->setFechacompra(fecha);
-				auxVn->setHrcompra(hora);
-				auxVn->setEstado("VIGENTE");
-				auxVn->setValor(auxV->getRuta()->getCosto());
-				vendedora->getVentas().push_back(auxVn);
-				tVentas.push_back(auxVn);
-				auxV->getVendidos().push_back(auxVn);
-				diff=auxVn->getValor() - (*it)->getValor();
+				diff=auxV->getRuta()->getCosto() - (*it)->getValor();
 				if(diff<0)
 				{
-					cout<<"--- Se le debe retornar al cliente "<<diff* -1<<endl;
+					cout<<"--- La fecha nueva de vuelo sera "<<auxV->getFecha()<<" y se debe realizar una devolucion de"<<diff* -1<<", acepta los cambios? S/N ";
 				}
 				else
 				{
-					cout<<"--- El cliente debe abonar "<<diff<<endl;
+					cout<<"--- La fecha nueva de vuelo sera "<<auxV->getFecha()<<" y se debe realizar un abono de "<<diff<<", acepta los cambios? S/N ";
 				}
-				updateStates(tRutas,tVuelos,vendedora);
-				inventory(vendedora->getVentas(),tRutas,tVuelos);
+				cin>>des;
+				switch (des) {
+				case 's':
+				case 'S':
+					auxVn->setCodigo((*it)->getCodigo());
+					auxVn->setRuta(idVueloN);
+					auxVn->setIdcomprador((*it)->getIdComprador());
+					auxVn->setNombre((*it)->getNombre());
+					auxVn->setFechavuelo(auxV->getFecha());
+					auxVn->setFechacompra(fecha);
+					auxVn->setHrcompra(hora);
+					auxVn->setEstado("VIGENTE");
+					auxVn->setValor(auxV->getRuta()->getCosto());
+					vendedora->getVentas().push_back(auxVn);
+					tVentas.push_back(auxVn);
+					auxV->getVendidos().push_back(auxVn);
+					diff=auxVn->getValor() - (*it)->getValor();
+					updateStates(tRutas,tVuelos,vendedora);
+					inventory(vendedora->getVentas(),tRutas,tVuelos);
+					break;
+				case 'n':
+				case 'N':
+					return false;
+				default:
+					while(des!='n'&&des!='N'&&des!='s'&&des!='S')
+					{
+						cout<<"S/N? ";
+						cin>>des;
+					}
+				}
 			}
 			return true;
 		}
