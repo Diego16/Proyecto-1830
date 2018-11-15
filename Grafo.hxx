@@ -355,7 +355,7 @@ unsigned int Graph<T>::DFCount(Vertex<T>* v ){
 }
 //=========================================================================
 template <class T>
-void Graph<T>::dijkstra(T begin, T end){
+std::stack<T> Graph<T>::dijkstra(T begin, T end){
 	this->resetValue();
 	std::priority_queue<Vertex<T>*, std::vector<Vertex<T>*>, VertComparator<T> > queue;
 	std::multimap<Vertex<T>*, Vertex<T>*> print;
@@ -388,13 +388,9 @@ void Graph<T>::dijkstra(T begin, T end){
 				}
 			}
 		}
-		while(!track.empty()) {
-			std::cout<<track.top()<<", ";
-			track.pop();
-		}
 	}
-	std::cout<<std::endl;
 	this->resetEdgeVisited();
+	return track;
 }
 //=========================================================================
 template<class T>

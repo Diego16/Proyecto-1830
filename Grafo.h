@@ -47,7 +47,7 @@ unsigned int numberOfConectedComponents(Vertex<T>* v1);
 std::set<Vertex<T>*, VertComparator<T> > GetConectedComponents(Vertex<T>* v1);
 unsigned int DFCount(Vertex<T>* v );
 void resetValue();
-void dijkstra(T begin, T end);
+std::stack<T> dijkstra(T begin, T end);
 void resetEdgeVisited();
 };
 #include "Grafo.hxx"
