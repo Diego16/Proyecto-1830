@@ -12,6 +12,7 @@
 #include <readline/history.h> //For tab-comletion Installation: sudo apt-get install libreadline-dev
 #include <readline/readline.h> //For tab-completion Installation: sudo apt-get install libreadline-dev
 #include "table_printer.h" //Taken from https://github.com/dattanchu/bprinter under MIT License
+#include "Grafo.h"
 #include "agencia.h"
 #include "venta.h"
 #include "ruta.h"
@@ -35,6 +36,7 @@ void consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuel
 void finances(Agencia* &vendedora);
 //Funciones componente 3
 bool changeSell(string idCliente, string idVueloO, string idVueloN, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, list<Venta*> &tVentas, Agencia* &vendedora);
+bool flightTo(string city1, string city2, list<Ruta*> &tRutas);
 //Funciones auxiliares
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
@@ -82,12 +84,22 @@ int main(int argc, char* argv[])
 		char* cmdList[10];
 		char* piece;
 		piece = strtok(command, " ");
-		while (piece != NULL)
+		if(strcmp(piece,"path")==0)
 		{
-			cmdList[cantCmd] = piece;
-			cantCmd++;
-			piece = strtok(NULL, " ");
+			while (piece != NULL)
+			{
+				cmdList[cantCmd] = piece;
+				cantCmd++;
+				piece = strtok(NULL, "-");
+			}
 		}
+		else
+			while (piece != NULL)
+			{
+				cmdList[cantCmd] = piece;
+				cantCmd++;
+				piece = strtok(NULL, " ");
+			}
 		if (strcmp(cmdList[0],"login")==0 && !logged)
 		{
 			if (cantCmd==2)
@@ -182,7 +194,9 @@ int main(int argc, char* argv[])
 		{
 			if(cantCmd==3)
 			{
-
+				input=cmdList[1];
+				input1=cmdList[2];
+				flightTo(input,input1,tRutas);
 			}
 			else
 				cout << "** Parametros invalidos **" << endl;
@@ -234,7 +248,7 @@ int main(int argc, char* argv[])
 				if(cmdInput=="change")
 					cout << "=== change <id_pasajero> <id_vuelo_original> <id_vuevo_vuelo>" << endl << "==== Se cambia el vuelo de un pasajero acorde al paquete" << endl;
 				if(cmdInput=="path")
-					cout << "=== path <origen> <destino>" << endl << "==== Calcula maximo tres rutas entre dos ciudades" << endl;
+					cout << "=== path <origen>-<destino>" << endl << "==== Calcula maximo tres rutas entre dos ciudades" << endl;
 				if(cmdInput=="logout")
 					cout << "=== logout" << endl << "==== Termina la sesión de la agencia logueada en la aplicación" << endl;
 				if(cmdInput=="exit")
@@ -556,6 +570,52 @@ bool changeSell(string idCliente, string idVueloO, string idVueloN, list<Ruta*> 
 				}
 			}
 			return true;
+		}
+	}
+	return false;
+}
+bool flightTo(string city1, string city2, list<Ruta*> &tRutas)
+{
+	Graph<Ruta*> grafoRutas= new Graph<Ruta*>(false);
+	int time=0, hrs=0, min=0, max=0;
+	stack<Ruta*> res;
+	for(list<Ruta*>::iterator it = tRutas.begin(); it!=tRutas.end(); it++)
+	{
+		grafoRutas.addVertex((*it));
+	}
+	for(list<Ruta*>::iterator it = tRutas.begin(); it!=tRutas.end(); it++)
+	{
+		hrs=(((stoi((*it)->getHrsalida())+((*it)->getDuracion()+200))/100)%24)+1;
+		min=((stoi((*it)->getHrsalida())+((*it)->getDuracion()+200))%100)%60;
+		time=(hrs*100)+min;
+		for(list<Ruta*>::iterator it1 = tRutas.begin(); it1!=tRutas.end(); it1++)
+		{
+			if((*it)->getDestino()==(*it1)->getOrigen()&&((time<=stoi((*it1)->getHrsalida()))))
+			{
+				grafoRutas.addEdge((*it),(*it1),1);
+			}
+		}
+	}
+	for(list<Ruta*>::iterator it = tRutas.begin(); it!=tRutas.end(); it++)
+	{
+		for(list<Ruta*>::iterator it1 = tRutas.begin(); it1!=tRutas.end(); it1++)
+		{
+			if(((*it)->getOrigen()==city1&&(*it1)->getDestino()==city2)&&max<3)
+			{
+				res=grafoRutas.dijkstra((*it),(*it1));
+				if(!res.empty()&&res.top()==(*it)) {
+					cout<<"Opcion "<<max+1<<":"<<endl<<"\t";
+					while(!res.empty()) {
+						if(res.size()!=1)
+							cout<<res.top()<<" -> ";
+						else
+							std::cout<<res.top();
+						res.pop();
+					}
+					cout<<endl;
+					max++;
+				}
+			}
 		}
 	}
 	return false;
