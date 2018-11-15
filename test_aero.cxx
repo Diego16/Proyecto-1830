@@ -33,6 +33,8 @@ void availability(string input,string input1,list<Vuelo*> &tVuelos);
 bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedora);
 void consolidate(list<Venta*> &tVentas, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos);
 void finances(Agencia* &vendedora);
+//Funciones componente 3
+bool changeSell(string idCliente, string idVueloO, string idVueloN, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, list<Venta*> &tVentas, Agencia* &vendedora);
 //Funciones auxiliares
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias);
 bool loadFlights(string nombreArchivo, list<Ruta*> &tRutas);
@@ -189,7 +191,7 @@ int main(int argc, char* argv[])
 		{
 			if(cantCmd==4)
 			{
-
+				changeSell(cmdList[1],cmdList[2],cmdList[3],tRutas,tVuelos,tVentas,user);
 			}
 			else
 				cout << "** Parametros invalidos **" << endl;
@@ -406,6 +408,8 @@ bool cancelSell(string idVenta, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agen
 				auxV->setDisponibles(auxV->getDisponibles()+1);
 				vendedora->setCancelados(vendedora->getCancelados()+1);
 				vendedora->setDevoluciones(vendedora->getDevoluciones()-((*it)->getValor()*0.85));
+				(*it)->setRuta(" ");
+				(*it)->setFechavuelo(" ");
 			}
 			(*it)->setEstado("CANCELADO");
 			res=true;
@@ -452,6 +456,93 @@ void finances(Agencia* &vendedora)
 		tp2 << (*it)->getCodigo() << (*it)->getRuta() << (*it)->getValor() << (*it)->getEstado();
 	}
 	tp2.PrintFooter();
+}
+bool changeSell(string idCliente, string idVueloO, string idVueloN, list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, list<Venta*> &tVentas, Agencia* &vendedora)
+{
+	Ruta* auxR = new Ruta();
+	Vuelo* auxV = new Vuelo();
+	Venta* auxVn = new Venta();
+	char fecha[10], hora[6];
+	char des = ' ';
+	int diff = 0;
+	using chrono::system_clock;
+	time_t tt = system_clock::to_time_t (system_clock::now());
+	strftime(fecha,sizeof(fecha),"%Y%m%d", localtime(&tt));
+	strftime(hora,sizeof(hora),"%H%M", localtime(&tt));
+	for(list<Venta*>::iterator it = vendedora->getVentas().begin(); it!=vendedora->getVentas().end(); it++)
+	{
+		if((*it)->getIdComprador()==idCliente && (*it)->getRuta()==idVueloO&&(*it)->getEstado()=="VIGENTE")
+		{
+			auxR=findRuta(idVueloN,tRutas);
+			if(auxR->getCodigo()=="0")
+			{
+				cout<<"*** El vuelo nuevo no existe ***"<<endl;
+				return false;
+			}
+			else
+			{
+				auxV=findVuelo((*it)->getFechavuelo(),auxR,tVuelos);
+				if(auxV->getDisponibles()==0)
+				{
+					cout<<"--- No hay ningun vuelo disponible en la fecha de vuelo del paquete, desea buscar otra fecha? S/N ";
+					cin>>des;
+					switch (des) {
+					case 's':
+					case 'S':
+						for(list<Vuelo*>::iterator it1 = tVuelos.begin(); it1!=tVuelos.end(); it1++)
+						{
+							if(((*it1)->getRuta()==auxR)&&((*it1)->getFecha()>(*it)->getFechavuelo()||(*it1)->getFecha()>fecha))
+							{
+								auxV=*it1;
+								break;
+							}
+						}
+						break;
+					case 'n':
+					case 'N':
+						return false;
+					default:
+						while(des!='n'&&des!='N'&&des!='s'&&des!='S')
+						{
+							cout<<"S/N? ";
+							cin>>des;
+						}
+					}
+					if(auxV->getDisponibles()==0)
+					{
+						cout<<"*** No hay ningun vuelo disponible ***"<<endl;
+						return false;
+					}
+
+				}
+				auxVn->setCodigo((*it)->getCodigo());
+				auxVn->setRuta(idVueloN);
+				auxVn->setIdcomprador((*it)->getIdComprador());
+				auxVn->setNombre((*it)->getNombre());
+				auxVn->setFechavuelo(auxV->getFecha());
+				auxVn->setFechacompra(fecha);
+				auxVn->setHrcompra(hora);
+				auxVn->setEstado("VIGENTE");
+				auxVn->setValor(auxV->getRuta()->getCosto());
+				vendedora->getVentas().push_back(auxVn);
+				tVentas.push_back(auxVn);
+				auxV->getVendidos().push_back(auxVn);
+				diff=auxVn->getValor() - (*it)->getValor();
+				if(diff<0)
+				{
+					cout<<"--- Se le debe retornar al cliente "<<diff* -1<<endl;
+				}
+				else
+				{
+					cout<<"--- El cliente debe abonar "<<diff<<endl;
+				}
+				updateStates(tRutas,tVuelos,vendedora);
+				inventory(vendedora->getVentas(),tRutas,tVuelos);
+			}
+			return true;
+		}
+	}
+	return false;
 }
 bool loadAgencies(string nombreArchivo, list<Agencia*> &tAgencias)
 {
@@ -588,6 +679,7 @@ void updateStates(list<Ruta*> &tRutas, list<Vuelo*> &tVuelos, Agencia* &vendedor
 				{
 					int diff=0;
 					(*it)->setEstado("CAMBIO");
+					(*it)->setFechavuelo(" ");
 					(*itI)->setEstado("VIGENTE");
 					auxV=findVuelo((*it)->getFechavuelo(),findRuta((*it)->getRuta(),tRutas),tVuelos);
 					auxV->setDisponibles(auxV->getDisponibles()+1);
